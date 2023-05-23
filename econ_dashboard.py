@@ -13,6 +13,7 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.preprocessing.text import Tokenizer
 from tensorflow.python.keras.models import load_model
+from selenium.webdriver.chrome.options import Options
 from keras.utils import pad_sequences
 import nltk
 from nltk.corpus import stopwords
@@ -141,7 +142,11 @@ data_option = st.selectbox("Select The Calendar", ["Forex","Metals","Energy", "C
 def fx_calendar():
     
     economic_calendar = "https://www.forexfactory.com/calendar?day=today"
-    driver = uc.Chrome(use_subprocess=True)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+
+    # Initialize Chrome driver
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(economic_calendar)
     
     table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table  "]')
