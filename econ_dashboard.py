@@ -262,8 +262,6 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-from huggingface_hub import from_pretrained_keras
-
 model = from_pretrained_keras("dfavenfre/model_use")
 
 # Function to make prediction on new text
