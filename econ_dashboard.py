@@ -1,8 +1,4 @@
 # packages
-pip install tensorflow
-import tensorflow as tf
-from tensorflow import keras
-import tensorflow_hub as hub
 import nltk
 import re
 import string
@@ -17,10 +13,7 @@ import yfinance as yf
 import pandas as pd
 import plotly.figure_factory as ff
 
-from keras.preprocessing.text import Tokenizer
 from tensorflow.python.keras.models import load_model
-from keras.utils import pad_sequences
-from nltk.corpus import stopwords
 from datetime import datetime
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
