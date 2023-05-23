@@ -296,8 +296,8 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-from huggingface_hub import from_pretrained_keras
-model = from_pretrained_keras("dfavenfre/model_use", model_kwargs={"from_pt": True})
+from transformers import TFAutoModel
+model = TFAutoModel.from_pretrained("dfavenfre/model_use")
 
 # Function to make prediction on new text
 def predict_sentiment(text):
