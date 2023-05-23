@@ -105,7 +105,6 @@ grpc-google-iam-v1==0.12.3
 grpcio==1.54.0
 grpcio-status==1.48.2
 h11==0.14.0
-h5py==3.8.0
 html5lib==1.1
 htmlmin==0.1.12
 huggingface-hub==0.14.1
@@ -121,7 +120,6 @@ ipywidgets==8.0.4
 isodate==0.6.1
 isoduration==20.11.0
 itypes==1.2.0
-jax==0.4.10
 jedi==0.18.2
 Jinja2==3.1.2
 jmespath==0.10.0
@@ -141,7 +139,6 @@ jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.5
 keras==2.12.0
 kiwisolver==1.4.4
-label-studio==1.7.3
 label-studio-converter==0.0.51
 label-studio-tools==0.0.2
 launchdarkly-server-sdk==7.5.0
