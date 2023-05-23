@@ -96,9 +96,10 @@ st.write(
     """
 )
 
+def convert_df(df):
+    return df.to_csv().encode('utf-8')
 if 'ticker_df' not in st.session_state:
     st.session_state.ticker_df = None
-
 # Display Ticker/Symbol
 with st.form(key="Sceener"):
     name = st.text_input(label="Write Ticker/Symbol")
@@ -120,10 +121,7 @@ if st.session_state.ticker_df is not None:
                                                low=ticker_df.Low,
                                                close=ticker_df.Close)])
     st.plotly_chart(fig_close)
-
-def convert_df(df):
-    return df.to_csv().encode('utf-8')
-
+    
     csv = convert_df(ticker_df)
     st.download_button(
         label="Download Ticker Data",
