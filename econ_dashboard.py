@@ -1,4 +1,37 @@
 # packages
+from selenium.webdriver.support.ui import Select
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import tensorflow as tf
+from tensorflow import keras
+from keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.models import load_model
+from keras.utils import pad_sequences
+import nltk
+from nltk.corpus import stopwords
+import re
+import string
+import undetected_chromedriver as uc
+import pickle
+import datetime
+import pandas as pd
+import warnings
+import plotly.graph_objects as go
+import streamlit as st
+from datetime import datetime
+import yfinance as yf
+import pandas as pd
+import plotly.figure_factory as ff
+warnings.filterwarnings('ignore')
+
+# packages
 import nltk
 import re
 import string
@@ -288,14 +321,14 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-
 from huggingface_hub import from_pretrained_keras
+
 model = from_pretrained_keras("dfavenfre/model_use")
 
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
-    prediction = tf.squeeze(model_use.predict([text]))
+    prediction = tf.squeeze(model.predict([text]))
     return prediction
 
 def get_sentiment_label(pred):
