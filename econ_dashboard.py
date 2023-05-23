@@ -142,7 +142,7 @@ data_option = st.selectbox("Select The Calendar", ["Forex","Metals","Energy", "C
 def fx_calendar():
     
     economic_calendar = "https://www.forexfactory.com/calendar?day=today"
-    chrome_options = ChromeOptions()
+    chrome_options = Options()
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--headless")
 
