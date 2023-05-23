@@ -119,7 +119,6 @@ python-binance==1.0.16
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-json-logger==2.0.4
-pytz==2019.3
 pytz-deprecation-shim==0.1.0.post0
 PyYAML==6.0
 pyzmq==25.0.0
