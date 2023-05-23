@@ -140,7 +140,6 @@ st.write(
 )
 data_option = st.selectbox("Select The Calendar", ["Forex","Metals","Energy", "Crypto"])
 
-
 def fx_calendar():
     
     economic_calendar = "https://www.forexfactory.com/calendar?day=today"
@@ -173,6 +172,7 @@ def fx_calendar():
 
     
     return data
+
 def metals_calendar():
     economic_calendar = "https://www.metalsmine.com/calendar?day=today"
     driver = uc.Chrome(use_subprocess=True)
@@ -200,6 +200,7 @@ def metals_calendar():
                                      "Event":event_names,"Actual":actual_data,
                                      "Forecast":forecast_data,"Previous":previous_data})
     return data
+
 def energy_calendar():
     economic_calendar = "https://www.energyexch.com/calendar?day=today"
     driver = uc.Chrome(use_subprocess=True)
@@ -227,13 +228,37 @@ def energy_calendar():
                                      "Event":event_names,"Actual":actual_data,
                                      "Forecast":forecast_data,"Previous":previous_data})
     return data
+
 def crypto_calendar():
-  
-  
+    economic_calendar = "https://www.cryptocraft.com/calendar?day=today"
+    driver = uc.Chrome(use_subprocess=True)
+    driver.get(economic_calendar)
+    
+    table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table calendar__table--no-currency "]')
+    container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
+
+    event_time=[]
+    event_names=[]
+    actual_data=[]
+    forecast_data=[]
+    previous_data=[]
+
+    # scraping
+    for contain in container:
+        event_time.append(contain.find_element(By.XPATH,".//td[@class='calendar__cell calendar__time time']").text)    
+        event_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__event event"]').text)      
+        actual_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__actual actual"]').text)      
+        forecast_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__forecast forecast"]').text)   
+        previous_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__previous previous"]').text)
+           
+    driver.quit()
+    data = pd.DataFrame({"Time":event_time,
+                                     "Event":event_names,"Actual":actual_data,
+                                     "Forecast":forecast_data,"Previous":previous_data})
+    return data
   
   # Download Button For Economic Calendar
 def convert_df(df):
-
     return df.to_csv().encode('utf-8')
 
 if data_option == "Forex":
