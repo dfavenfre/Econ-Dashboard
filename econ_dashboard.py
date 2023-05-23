@@ -121,8 +121,8 @@ if st.session_state.ticker_df is not None:
                                                close=ticker_df.Close)])
     st.plotly_chart(fig_close)
 
-    def convert_df(df):
-        return df.to_csv().encode('utf-8')
+def convert_df(df):
+    return df.to_csv().encode('utf-8')
 
     csv = convert_df(ticker_df)
     st.download_button(
