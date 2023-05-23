@@ -142,16 +142,17 @@ data_option = st.selectbox("Select The Calendar", ["Forex","Metals","Energy", "C
 def fx_calendar():
     
     economic_calendar = "https://www.forexfactory.com/calendar?day=today"
-    chrome_options = Options()
+    chrome_options = ChromeOptions()
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--headless")
 
-    # Initialize Chrome driver
-    driver = uc.Chrome(use_subprocess=False,options=chrome_options)
+    # Initialize Chrome driver using webdriver_manager
+    driver = Chrome(options=chrome_options, executable_path=ChromeDriverManager().install())
     driver.get(economic_calendar)
-    
-    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
-    container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
+
+    table_data = driver.find_element(By.XPATH, '//table[contains(@class, "calendar__table")]')
+    container = table_data.find_elements(By.XPATH, '//tr[@data-touchable]')
+
 
     event_time=[]
     currency_names=[]
