@@ -1,3 +1,38 @@
+# packages
+import tensorflow as tf
+from tensorflow import keras
+import tensorflow_hub as hub
+import nltk
+import re
+import string
+import undetected_chromedriver as uc
+import pickle
+import datetime
+import pandas as pd
+import warnings
+import plotly.graph_objects as go
+import streamlit as st
+import yfinance as yf
+import pandas as pd
+import plotly.figure_factory as ff
+
+from keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.models import load_model
+from keras.utils import pad_sequences
+from nltk.corpus import stopwords
+from datetime import datetime
+from selenium.webdriver.support.ui import Select
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+warnings.filterwarnings('ignore')
+
 # Welcome to Econ Dashboard (Beta) 
 title_html = """
     <h1 style="color:black; font-size:36px;">Welcome to Econ Dashboard <span style="font-size:14px;">BETA</span></h1>
