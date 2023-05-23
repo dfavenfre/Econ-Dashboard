@@ -297,7 +297,7 @@ st.write(
         
     """)
 from huggingface_hub import from_pretrained_keras
-model = from_pretrained_keras("dfavenfre/model_use")
+model = from_pretrained_keras("dfavenfre/model_use", model_kwargs={"from_pt": True})
 
 # Function to make prediction on new text
 def predict_sentiment(text):
