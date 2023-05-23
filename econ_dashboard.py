@@ -1,4 +1,5 @@
 # packages
+pip install tensorflow
 import tensorflow as tf
 from tensorflow import keras
 import tensorflow_hub as hub
