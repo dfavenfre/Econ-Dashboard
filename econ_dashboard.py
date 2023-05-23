@@ -143,13 +143,14 @@ def fx_calendar():
     
     economic_calendar = "https://www.forexfactory.com/calendar?day=today"
     chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--headless")
 
     # Initialize Chrome driver
-    driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
+    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
     driver.get(economic_calendar)
     
-    table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table  "]')
+    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
     container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
 
     event_time=[]
@@ -178,10 +179,15 @@ def fx_calendar():
 
 def metals_calendar():
     economic_calendar = "https://www.metalsmine.com/calendar?day=today"
-    driver = uc.Chrome(use_subprocess=True)
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--headless")
+
+    # Initialize Chrome driver
+    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
     driver.get(economic_calendar)
     
-    table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table calendar__table--no-currency "]')
+    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
     container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
 
     event_time=[]
@@ -206,10 +212,15 @@ def metals_calendar():
 
 def energy_calendar():
     economic_calendar = "https://www.energyexch.com/calendar?day=today"
-    driver = uc.Chrome(use_subprocess=True)
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--headless")
+
+    # Initialize Chrome driver
+    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
     driver.get(economic_calendar)
     
-    table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table calendar__table--no-currency "]')
+    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
     container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
 
     event_time=[]
@@ -234,10 +245,15 @@ def energy_calendar():
 
 def crypto_calendar():
     economic_calendar = "https://www.cryptocraft.com/calendar?day=today"
-    driver = uc.Chrome(use_subprocess=True)
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--headless")
+
+    # Initialize Chrome driver
+    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
     driver.get(economic_calendar)
     
-    table_data = driver.find_element(By.XPATH,'//table[@class="calendar__table calendar__table--no-currency "]')
+    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
     container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
 
     event_time=[]
