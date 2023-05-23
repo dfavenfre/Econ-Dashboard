@@ -147,7 +147,7 @@ def fx_calendar():
     chrome_options.add_argument("--headless")
 
     # Initialize Chrome driver
-    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
+    driver = uc.Chrome(use_subprocess=False,options=chrome_options)
     driver.get(economic_calendar)
     
     table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
