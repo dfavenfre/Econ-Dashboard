@@ -272,6 +272,28 @@ st.write(
     """)
 
 from huggingface_hub import from_pretrained_keras
-
 model = from_pretrained_keras("dfavenfre/model_use")
 
+# Function to make prediction on new text
+def predict_sentiment(text):
+    # Make prediction
+    prediction = tf.squeeze(model_use.predict([text]))
+    return prediction
+
+def get_sentiment_label(pred):
+    sentiment_label = ["Negative", "Neutral", "Positive"]
+    max_index = pred.argmax()
+    return sentiment_label[max_index]
+
+text_input = st.text_area("Enter the text:", value='')
+submit_button = st.button("Predict")
+
+if submit_button and text_input:
+    # Make prediction
+    prediction = predict_sentiment(text_input)
+    sentiment_label = get_sentiment_label(prediction)
+    confidence = prediction.max() * 100
+
+    # Output the result
+    output = f"{sentiment_label.capitalize()} : [Confidence: {confidence:.2f}%]"
+    st.write("Sentiment Prediction:", output)
