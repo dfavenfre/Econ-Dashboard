@@ -144,22 +144,27 @@ if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
+
 if data_option == "FX Market":
     if st.button("Get Data"):
         currency_data = get_currencies()
         st.dataframe(currency_data, width=800)   
+
 if data_option == "Stock Market":
     if st.button("Get Data"):
         stocks_data = get_stocks()
         st.dataframe(stocks_data, width=800)  
+
 if data_option == "Commodities":
     if st.button("Get Data"):
         commodity_data = get_commodities()
         st.dataframe(commodity_data, width=800)  
+
 if data_option == "Bonds":
     if st.button("Get Data"):
         bonds_data = get_bonds()
         st.dataframe(bonds_data, width=800)  
+
 if data_option == "Crypto":
     if st.button("Get Data"):
         crypto_data = get_crypto()
