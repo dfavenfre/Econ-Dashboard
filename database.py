@@ -1,4 +1,3 @@
-from deta import Deta
 import pandas as pd
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -9,7 +8,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
 
-load_dotenv(".env")
+from deta import Deta
 DETA_KEY_ECON_DASHBOARD = st.secrets["dashboard_db"]
 deta_dashboard = Deta(DETA_KEY_ECON_DASHBOARD)
 
@@ -148,7 +147,7 @@ def insert_commodities():
                             "monthly":monthly.tolist(), "yoy":yoy.tolist()})   
 # (COMMODITY)
 def get_commodities():
-    data = db_stocks.fetch().items
+    data = db_commodities.fetch().items
     data = pd.DataFrame(data)
     data = data.apply(pd.Series.explode)
     columns_to_select = ["commodity", "price", "percentage_change", "weekly", "monthly", "yoy"]
@@ -184,9 +183,10 @@ def get_bonds():
     data = db_bonds.fetch().items
     data = pd.DataFrame(data)
     data = data.apply(pd.Series.explode)
-    columns_to_select = ["10Y", "yields", "weekly", "monthly", "yoy"]
+    columns_to_select = ["Y_10", "yields", "weekly", "monthly", "yoy"]
     data = data[columns_to_select]
-    return data   
+    return data 
+  
 # (BONDS)
 def update_bonds():
     data = fetch_bonds()
@@ -198,7 +198,6 @@ def update_bonds():
     return db_bonds.put({"Y_10":Y_10.tolist(),"yields":yields.tolist(),
                                 "weekly":weekly.tolist(),"monthly":monthly.tolist(), 
                                 "yoy":yoy.tolist()}, key=st.secrets["bonds_db_key"])      
-
 
 # (CRYPTO)
 def insert_crypto():
@@ -222,6 +221,7 @@ def get_crypto():
     columns_to_select = ["currency", "price", "percentage_change", "weekly", "monthly", "yoy","marketcap"]
     data = data[columns_to_select]
     return data
+
 # (CRYPTO)
 def update_crypto():
     data = fetch_crypto()
