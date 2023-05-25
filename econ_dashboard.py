@@ -1,36 +1,25 @@
 # packages
-from selenium.webdriver.support.ui import Select
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import tensorflow as tf
 from tensorflow import keras
-from keras.preprocessing.text import Tokenizer
 from tensorflow.python.keras.models import load_model
-from selenium.webdriver.chrome.options import Options
-from keras.utils import pad_sequences
-import nltk
-from nltk.corpus import stopwords
-import re
-import string
-import undetected_chromedriver as uc
 import pickle
 import datetime
 import pandas as pd
-import warnings
 import plotly.graph_objects as go
 import streamlit as st
 from datetime import datetime
 import yfinance as yf
 import pandas as pd
-import plotly.figure_factory as ff
-warnings.filterwarnings('ignore')
+
+from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
+from database import get_calendar, update_calendar, get_currencies, update_currency, get_stocks, update_stocks, get_commodities, update_commodities, get_bonds, update_bonds, get_crypto, update_crypto, get_earnings, update_earnings
+
 # Welcome to Econ Dashboard (Beta) 
 title_html = """
     <h1 style="color:black; font-size:36px;">Welcome to Econ Dashboard <span style="font-size:14px;">BETA</span></h1>
@@ -97,6 +86,7 @@ st.write(
 
 def convert_df(df):
     return df.to_csv().encode('utf-8')
+
 if 'ticker_df' not in st.session_state:
     st.session_state.ticker_df = None
 # Display Ticker/Symbol
@@ -134,169 +124,46 @@ st.title("Economic Calendar")
 st.write(
     
     """
-    Access a professional-grade calendar featuring daily updates on Metals, Forex, Energy, and Crypto markets, including comprehensive news, actual, forecast, and previous announcements. Customize your experience by filtering currencies and events to focus on what matters most to you.
+    Access a professional-grade calendar featuring daily updates on Economic Calendar, Forex, Stocks, Commodities, Bonds, and Crypto and Earnings, including comprehensive news, actual, forecast, and previous announcements.
     """
 )
-data_option = st.selectbox("Select The Calendar", ["Forex","Metals","Energy", "Crypto"])
+data_option = st.selectbox("Select Data", ["Forex Calendar","FX Market","Stock Market", "Commodities","Bonds","Crypto","Earnings"])
 
-def fx_calendar():
-    
-    economic_calendar = "https://www.forexfactory.com/calendar?day=today"
-    chrome_options = Options()
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--headless")
+from deta import Deta
+DETA_KEY_ECON_DASHBOARD = st.secrets["dashboard_db"]
+deta_dashboard = Deta(DETA_KEY_ECON_DASHBOARD)
+db_calendar = deta_dashboard.Base("daily_forex_calendar")
+db_currency = deta_dashboard.Base("daily_currency")
+db_stocks = deta_dashboard.Base("daily_stocks")
+db_commodities = deta_dashboard.Base("daily_commodities")
+db_bonds = deta_dashboard.Base("daily_bonds")
+db_crypto = deta_dashboard.Base("daily_crypto")
+db_earnings = deta_dashboard.Base("daily_earnings")
 
-    # Initialize Chrome driver using webdriver_manager
-    driver = webdriver.Chrome(options=chrome_options, executable_path=ChromeDriverManager().install())
-    driver.get(economic_calendar)
-
-    table_data = driver.find_element(By.XPATH, '//table[contains(@class, "calendar__table")]')
-    container = table_data.find_elements(By.XPATH, '//tr[@data-touchable]')
-
-
-    event_time=[]
-    currency_names=[]
-    event_names=[]
-    actual_data=[]
-    forecast_data=[]
-    previous_data=[]
-
-    # scraping
-    for contain in container:
-        event_time.append(contain.find_element(By.XPATH,".//td[@class='calendar__cell calendar__time time']").text)
-        currency_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__currency currency "]').text)      
-        event_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__event event"]').text)      
-        actual_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__actual actual"]').text)      
-        forecast_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__forecast forecast"]').text)   
-        previous_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__previous previous"]').text)
-           
-    driver.quit()
-    data = pd.DataFrame({"Time":event_time,"Currency":currency_names,
-                                     "Event":event_names,"Actual":actual_data,
-                                     "Forecast":forecast_data,"Previous":previous_data})
-
-    
-    return data
-
-def metals_calendar():
-    economic_calendar = "https://www.metalsmine.com/calendar?day=today"
-    chrome_options = Options()
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--headless")
-
-    # Initialize Chrome driver
-    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
-    driver.get(economic_calendar)
-    
-    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
-    container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
-
-    event_time=[]
-    event_names=[]
-    actual_data=[]
-    forecast_data=[]
-    previous_data=[]
-
-    # scraping
-    for contain in container:
-        event_time.append(contain.find_element(By.XPATH,".//td[@class='calendar__cell calendar__time time']").text)     
-        event_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__event event"]').text)      
-        actual_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__actual actual"]').text)      
-        forecast_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__forecast forecast"]').text)   
-        previous_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__previous previous"]').text)
-           
-    driver.quit()
-    data = pd.DataFrame({"Time":event_time,
-                                     "Event":event_names,"Actual":actual_data,
-                                     "Forecast":forecast_data,"Previous":previous_data})
-    return data
-
-def energy_calendar():
-    economic_calendar = "https://www.energyexch.com/calendar?day=today"
-    chrome_options = Options()
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--headless")
-
-    # Initialize Chrome driver
-    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
-    driver.get(economic_calendar)
-    
-    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
-    container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
-
-    event_time=[]
-    event_names=[]
-    actual_data=[]
-    forecast_data=[]
-    previous_data=[]
-
-    # scraping
-    for contain in container:
-        event_time.append(contain.find_element(By.XPATH,".//td[@class='calendar__cell calendar__time time']").text)
-        event_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__event event"]').text)      
-        actual_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__actual actual"]').text)      
-        forecast_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__forecast forecast"]').text)   
-        previous_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__previous previous"]').text)
-           
-    driver.quit()
-    data = pd.DataFrame({"Time":event_time,
-                                     "Event":event_names,"Actual":actual_data,
-                                     "Forecast":forecast_data,"Previous":previous_data})
-    return data
-
-def crypto_calendar():
-    economic_calendar = "https://www.cryptocraft.com/calendar?day=today"
-    chrome_options = Options()
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--headless")
-
-    # Initialize Chrome driver
-    driver = uc.Chrome(use_subprocess=True,options=chrome_options)
-    driver.get(economic_calendar)
-    
-    table_data = driver.find_element(By.XPATH,'//table[contains(@class, "calendar__table")]')
-    container = table_data.find_elements(By.XPATH,'//tr[@data-touchable]')
-
-    event_time=[]
-    event_names=[]
-    actual_data=[]
-    forecast_data=[]
-    previous_data=[]
-
-    # scraping
-    for contain in container:
-        event_time.append(contain.find_element(By.XPATH,".//td[@class='calendar__cell calendar__time time']").text)    
-        event_names.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__event event"]').text)      
-        actual_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__actual actual"]').text)      
-        forecast_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__forecast forecast"]').text)   
-        previous_data.append(contain.find_element(By.XPATH,'.//td[@class="calendar__cell calendar__previous previous"]').text)
-           
-    driver.quit()
-    data = pd.DataFrame({"Time":event_time,
-                                     "Event":event_names,"Actual":actual_data,
-                                     "Forecast":forecast_data,"Previous":previous_data})
-    return data
-  
-  # Download Button For Economic Calendar
-def convert_df(df):
-    return df.to_csv().encode('utf-8')
-
-if data_option == "Forex":
+if data_option == "Forex Calendar":
     if st.button("Get Data"):
-        calendar_data = fx_calendar()
+        calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
-if data_option == "Metals":
+if data_option == "FX Market":
     if st.button("Get Data"):
-        calendar_data = metals_calendar()
-        st.dataframe(calendar_data, width=800)   
-if data_option == "Energy":
+        currency_data = get_currencies()
+        st.dataframe(currency_data, width=800)   
+if data_option == "Stock Market":
     if st.button("Get Data"):
-        calendar_data = energy_calendar()
-        st.dataframe(calendar_data, width=800)  
+        stocks_data = get_stocks()
+        st.dataframe(stocks_data, width=800)  
+if data_option == "Commodities":
+    if st.button("Get Data"):
+        commodity_data = get_commodities()
+        st.dataframe(commodity_data, width=800)  
+if data_option == "Bonds":
+    if st.button("Get Data"):
+        bonds_data = get_bonds()
+        st.dataframe(bonds_data, width=800)  
 if data_option == "Crypto":
     if st.button("Get Data"):
-        calendar_data = crypto_calendar()
-        st.dataframe(calendar_data, width=800)  
+        crypto_data = get_crypto()
+        st.dataframe(crypto_data, width=800)  
 
         
 ## Sentiment Analysis
@@ -313,8 +180,9 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-from transformers import TFAutoModel
-model = TFAutoModel.from_pretrained("dfavenfre/model_use")
+
+from huggingface_hub import from_pretrained_keras
+model = from_pretrained_keras("dfavenfre/model_use")
 
 # Function to make prediction on new text
 def predict_sentiment(text):
