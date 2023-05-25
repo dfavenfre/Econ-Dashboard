@@ -127,7 +127,7 @@ st.write(
     Access a professional-grade calendar featuring daily updates on Economic Calendar, Forex, Stocks, Commodities, Bonds, and Crypto and Earnings, including comprehensive news, actual, forecast, and previous announcements.
     """
 )
-data_option = st.selectbox("Select Data", ["Forex Calendar","FX Market","Stock Market", "Commodities","Bonds","Crypto","Earnings"])
+
 
 from deta import Deta
 DETA_KEY_ECON_DASHBOARD = st.secrets["dashboard_db"]
@@ -139,6 +139,8 @@ db_commodities = deta_dashboard.Base("daily_commodities")
 db_bonds = deta_dashboard.Base("daily_bonds")
 db_crypto = deta_dashboard.Base("daily_crypto")
 db_earnings = deta_dashboard.Base("daily_earnings")
+
+data_option = st.selectbox("Select Data", ["Forex Calendar","FX Market","Stock Market", "Commodities","Bonds","Crypto","Earnings"])
 
 if data_option == "Forex Calendar":
     if st.button("Get Data"):
@@ -170,7 +172,12 @@ if data_option == "Crypto":
         crypto_data = get_crypto()
         st.dataframe(crypto_data, width=800)  
 
-        
+if data_option == "Earnings":
+    if st.button("Get Data"):
+        earnings_data = get_earnings()
+        st.dataframe(earnings_data, width=800)  
+
+
 ## Sentiment Analysis
 st.title("Sentiment Analysis")
 st.write(
