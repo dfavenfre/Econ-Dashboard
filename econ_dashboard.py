@@ -193,6 +193,7 @@ st.write(
         
     """)
 import joblib
+import cloudpickle
 import requests
 import tempfile
 @st.cache_data()
@@ -203,7 +204,7 @@ def load_model():
         temp_file.write(response.content)
         temp_file.close()
         with open(temp_file.name, 'rb') as f:
-            return pickle.load(f)
+            return cloudpickle.load(f)
 
 # Load the model
 model = load_model()
