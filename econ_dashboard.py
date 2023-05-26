@@ -194,23 +194,13 @@ st.write(
     """)
 
 @st.cache_data()
-def load_model():
+# Download the model file using the sharing link
+url = "https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing"
+output = "model_use"
+gdown.download(url, output, quiet=False)
+# Load the model from the SavedModel format
+model = tf.keras.models.load_model("model_use")
 
-    save_dest = Path('model')
-    save_dest.mkdir(exist_ok=True)
-    
-    f_checkpoint = Path("https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing")
-
-    if not f_checkpoint.exists():
-        with st.spinner("Downloading model... this may take awhile! \n Don't stop it!"):
-            from GD_download import download_file_from_google_drive
-            download_file_from_google_drive(cloud_model_location, f_checkpoint)
-    
-    model = torch.load(f_checkpoint, map_location=device)
-    model.eval()
-    return model
-
-model = load_model()
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
