@@ -192,10 +192,10 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-
+from transformers import AutoModel
 def main():
     # Load the model and config from Hugging Face Hub
-    model = TFAutoModel.from_pretrained("dfavenfre/model_use", config="dfavenfre/model_use")
+    model = AutoModel.from_pretrained("dfavenfre/model_use", config="dfavenfre/model_use")
     st.write("Model loaded successfully!")
 
 if __name__ == "__main__":
