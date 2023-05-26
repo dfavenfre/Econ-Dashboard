@@ -193,36 +193,13 @@ st.write(
         
     """)
 import tensorflow as tf
-import tensorflow_hub as hub
+import tensorflow_text as text
 import requests
 import shutil
 import zipfile
 import os
 import joblib
 import streamlit as st
-from tensorflow.python.keras.saving import saving_utils
-
-# Define the custom layer
-class USEEncoderLayer(tf.keras.layers.Layer):
-    def __init__(self, **kwargs):
-        super(USEEncoderLayer, self).__init__(**kwargs)
-        self.use_layer = hub.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder/4",
-                                        input_shape=[],
-                                        dtype=tf.string,
-                                        trainable=False,
-                                        name="USE_encoder")
-
-    def call(self, inputs, **kwargs):
-        return self.use_layer(inputs)
-
-# Register the custom layer
-def use_encoder_layer_pickle(layer):
-    return "USEEncoderLayer", {}
-
-def use_encoder_layer_unpickle(name, custom_objects):
-    return USEEncoderLayer()
-
-saving_utils.custom_object_scope({'USEEncoderLayer': use_encoder_layer_unpickle})
 
 # Download the model from Hugging Face Model Hub
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
@@ -248,10 +225,20 @@ if response.status_code == 200:
 
 st.write("Model:", model)
 
+# Function to preprocess text
+def preprocess_text(text):
+    # Preprocess the text (lowercase and remove punctuation)
+    text = tf.strings.lower(text)
+    text = tf.strings.regex_replace(text, '[%s]' % tf.strings.join('', text.text.split()).numpy().decode("utf-8"), '')
+    return text
+
 # Function to make prediction on new text
 def predict_sentiment(text, model):
+    # Preprocess the text
+    text = preprocess_text(text)
+
     # Make prediction
-    prediction = tf.squeeze(model.predict([text]))
+    prediction = model.predict([text])[0]
     return prediction
 
 def get_sentiment_label(pred):
@@ -275,4 +262,3 @@ if submit_button and text_input and model:
     st.write("Sentiment Prediction:", output)
 else:
     st.write("Model not loaded or text input missing")
-
