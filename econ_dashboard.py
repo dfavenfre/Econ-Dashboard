@@ -192,20 +192,13 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import requests
-import json
-import tensorflow as tf
 
 def main():
-    # Fetch the config.json from GitHub
-    config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
-    response = requests.get(config_url)
-    content = response.content.decode("utf-8")
-    st.write(content)  # Print the content for debugging purposes
-    config_json = json.loads(content)
+    # Load the model from the config.json file
+    with open("config.json", "r") as json_file:
+        config_json = json_file.read()
 
-    # Load the model from the config
-    model = tf.keras.models.model_from_json(json.dumps(config_json['config']))
+    model = tf.keras.models.model_from_json(config_json)
 
     st.write("Model loaded successfully!")
     st.write(model.summary())
