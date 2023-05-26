@@ -197,7 +197,8 @@ import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
 import requests
-from io import BytesIO
+import shutil
+import zipfile
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -217,23 +218,24 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 
 # Download the model from Hugging Face Model Hub
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use.zip"
-response = requests.get(model_url)
-zip_file = BytesIO(response.content)
+response = requests.get(model_url, stream=True)
+
+# Save the downloaded zip file to disk
+with open("/content/model_use.zip", "wb") as file:
+    shutil.copyfileobj(response.raw, file)
 
 # Extract the model from the zip file
-import zipfile
-with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-    zip_ref.extractall('/content/model_use')
+with zipfile.ZipFile("/content/model_use.zip", "r") as zip_ref:
+    zip_ref.extractall("/content/model_use")
 
 # Load the model with custom layer
-model = tf.keras.models.load_model('/content/model_use', custom_objects=custom_objects)
+model = tf.keras.models.load_model("/content/model_use", custom_objects=custom_objects)
 
 # Optional: Save the model
 joblib.dump(model, "/content/model_use2.pkl")
 
-# Load the model with custom layer
-with tf.keras.utils.custom_object_scope(custom_objects):
-    model = joblib.load("/content/model_use2.pkl")
+
+
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
