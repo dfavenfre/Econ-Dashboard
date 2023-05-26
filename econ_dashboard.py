@@ -193,11 +193,16 @@ st.write(
         
     """)
 
-import tensorflow as tf
+import wget
+from tensorflow.keras.models import load_model
+
+# Download the model file
+model_url = "https://github.com/dfavenfre/Econ-Dashboard/blob/5ef5ba576ae709d00b48b9af70aa2e0c77d4333d/model_use.h5?raw=true"
+model_path = "model_use.h5"
+wget.download(model_url, model_path)
+
 # Load the model
-model = tf.keras.models.load_model("model_use.h5")
-# Print the model summary
-model.summary()
+model = load_model(model_path)
     
 # Function to make prediction on new text
 def predict_sentiment(text):
