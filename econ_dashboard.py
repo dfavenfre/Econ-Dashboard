@@ -193,23 +193,12 @@ st.write(
         
     """)
 import joblib
-import cloudpickle
 import requests
-import tempfile
-@st.cache_data()
-def load_model():
-    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
-    response = requests.get(model_url)
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        temp_file.write(response.content)
-        temp_file.close()
-        with open(temp_file.name, 'rb') as f:
-            return cloudpickle.load(f)
+from io import BytesIO
 
-# Load the model
-model = load_model()
-
-
+model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
+response = requests.get(model_url)
+model = joblib.load(BytesIO(response.content))
 
 # Function to make prediction on new text
 def predict_sentiment(text):
