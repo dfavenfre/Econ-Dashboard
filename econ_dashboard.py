@@ -194,12 +194,15 @@ st.write(
     """)
 import joblib
 import requests
-
+import tempfile
 @st.cache_data()
 def load_model():
-    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
+    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use.pkl"
     response = requests.get(model_url)
-    return joblib.load(response.content)
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(response.content)
+        temp_file.close()
+        return joblib.load(temp_file.name)
 
 # Load the model
 model = load_model()
