@@ -193,18 +193,7 @@ st.write(
         
     """)
 
-def main():
-    # Load the model from the config.json file
-    with open("config.json", "r") as json_file:
-        config_json = json_file.read()
-
-    model = tf.keras.models.model_from_json(config_json)
-
-    st.write("Model loaded successfully!")
-    st.write(model.summary())
-
-if __name__ == "__main__":
-    main()
+model = load_model("C:\Users\Tolga\Desktop\streamlit apps\model_use.h5")
     
 # Function to make prediction on new text
 def predict_sentiment(text):
