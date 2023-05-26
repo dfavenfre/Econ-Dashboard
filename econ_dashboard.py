@@ -197,15 +197,17 @@ import requests
 import tempfile
 @st.cache_data()
 def load_model():
-    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use.pkl"
+    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
     response = requests.get(model_url)
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(response.content)
         temp_file.close()
-        return joblib.load(temp_file.name)
+        with open(temp_file.name, 'rb') as f:
+            return pickle.load(f)
 
 # Load the model
 model = load_model()
+
 
 
 # Function to make prediction on new text
