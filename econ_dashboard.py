@@ -193,22 +193,20 @@ st.write(
         
     """)
 import requests
-from transformers import TFAutoModel
-
-import requests
 import json
-from transformers import TFAutoModel
+import tensorflow as tf
 
 def main():
     # Fetch the config.json from GitHub
     config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
     response = requests.get(config_url)
-    config_json = json.loads(response.content)
+    config_json = response.json()
 
-    # Load the model using the fetched config and the model name from Hugging Face Hub
-    model_name = "dfavenfre/model_use"
-    model = TFAutoModel.from_pretrained(model_name, config=config_json)
+    # Load the model from the config
+    model = tf.keras.models.model_from_json(json.dumps(config_json['config']))
+
     st.write("Model loaded successfully!")
+    st.write(model.summary())
 
 if __name__ == "__main__":
     main()
