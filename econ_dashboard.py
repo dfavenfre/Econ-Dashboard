@@ -220,6 +220,9 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use.zip"
 response = requests.get(model_url, stream=True)
 
+# Load the model with custom layer
+model = None
+
 # Check if the response is successful and the content type is zip
 if response.status_code == 200 and response.headers.get("content-type") == "application/zip":
     # Define the path to save the downloaded zip file
@@ -242,12 +245,6 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
     # Optional: Save the model
     joblib.dump(model, "model_use2.pkl")
 
-else:
-    print("Error downloading the model. Please check the model URL.")
-
-
-
-
 # Function to make prediction on new text
 def predict_sentiment(text, model):
     # Make prediction
@@ -262,7 +259,7 @@ def get_sentiment_label(pred):
 text_input = st.text_area("Enter the text:", value='')
 submit_button = st.button("Predict")
 
-if submit_button and text_input:
+if submit_button and text_input and model:
     # Make prediction
     prediction = predict_sentiment(text_input, model)
     sentiment_label = get_sentiment_label(prediction)
@@ -271,3 +268,5 @@ if submit_button and text_input:
     # Output the result
     output = f"{sentiment_label.capitalize()} : [Confidence: {confidence:.2f}%]"
     st.write("Sentiment Prediction:", output)
+else:
+    st.write("Model not loaded or text input missing")
