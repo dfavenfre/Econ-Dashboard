@@ -193,19 +193,17 @@ st.write(
         
     """)
 
+import gdown
+import pickle
+import tensorflow as tf
 
-import os
-from tensorflow.keras.models import load_model
+url = "https://drive.google.com/file/d/1cl6NsZPNZsaKu2U4fXFvQoBnjQewGl7f/view?usp=sharing"
+output = "model_use.pkl"
+gdown.download(url, output, quiet=False)
 
-# Get the absolute path of the model file
-model_file = "model_use.h5"
-model_path = os.path.join(os.getcwd(), model_file)
-
-# Load the model
-model = load_model(model_path)
-
-# Print the model summary
-model.summary()
+# Load the model from the downloaded file
+with open("model_use.pkl", "rb") as f:
+    model = pickle.load(f)
 
 # Function to make prediction on new text
 def predict_sentiment(text):
