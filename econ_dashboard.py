@@ -192,14 +192,14 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-
-import os
 import joblib
+import requests
 
-app_directory = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(app_directory, "model_use.pkl")
+model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use.pkl"
+response = requests.get(model_url)
+model = joblib.load(response.content)
 
-model = joblib.load(model_path)
+
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
