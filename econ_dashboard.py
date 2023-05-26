@@ -194,6 +194,7 @@ st.write(
     """)
 
 # Download the model file using the sharing link
+import gdown
 url = "https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing"
 output = "model_use"
 gdown.download(url, output, quiet=False)
