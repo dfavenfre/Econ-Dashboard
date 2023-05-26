@@ -193,8 +193,13 @@ st.write(
         
     """)
 
-import joblib 
-model = joblib.load("./model_use.pkl","rb")
+import os
+import joblib
+
+app_directory = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(app_directory, "model_use.pkl")
+
+model = joblib.load(model_path)
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
