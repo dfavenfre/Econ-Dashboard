@@ -240,21 +240,18 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
         zip_ref.extractall(extract_dir)
 
     # Load the model with custom layer
-    model_file = os.path.join(extract_dir, "model_use2")
-    if os.path.isfile(model_file):
-        model = tf.keras.models.load_model(model_file, custom_objects=custom_objects)
+    model_dir = os.path.join(extract_dir, "model_use2")
+    if os.path.isdir(model_dir):
+        model = tf.saved_model.load(model_dir, custom_objects=custom_objects)
     else:
-        st.write("Error: Model file not found.")
-
-    # Optional: Save the model
-    model.save("model_use2")
+        st.write("Error: Model directory not found.")
 
 st.write("Model:", model)
 
 # Function to make prediction on new text
 def predict_sentiment(text, model):
     # Make prediction
-    prediction = tf.squeeze(model.predict([text]))
+    prediction = tf.squeeze(model(text))
     return prediction
 
 def get_sentiment_label(pred):
@@ -269,7 +266,7 @@ st.write("Text Input:", text_input)
 
 if submit_button and text_input and model:
     # Make prediction
-    prediction = predict_sentiment(text_input, model)
+    prediction = predict_sentiment([text_input], model)
     sentiment_label = get_sentiment_label(prediction)
     confidence = prediction.max() * 100
 
