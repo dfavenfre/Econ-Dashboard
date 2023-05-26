@@ -194,9 +194,12 @@ st.write(
     """)
 
 from transformers import TFAutoModel
-# Save the model and config
+# Load the model
 model = TFAutoModel.from_pretrained("dfavenfre/model_use")
-model.save_pretrained("model_use")
+# Get the configuration
+config = model.config
+# Save the model and config
+model.save_pretrained("model_use", saved_model=True, config=config)
 
 # Function to make prediction on new text
 def predict_sentiment(text):
