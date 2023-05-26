@@ -200,6 +200,12 @@ import boto3
 import requests
 from io import BytesIO
 
+import joblib
+import tensorflow as tf
+import tensorflow_hub as hub
+import requests
+from io import BytesIO
+
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
     def __init__(self, **kwargs):
@@ -216,13 +222,15 @@ class USEEncoderLayer(tf.keras.layers.Layer):
 # Register the custom layer
 custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
 
-# Download the model from S3 bucket
-s3_bucket_name = "modeluse"
-model_key = "model_use2.pkl"
-s3 = boto3.client("s3")
-response = s3.get_object(Bucket=s3_bucket_name, Key=model_key)
-model_bytes = response["Body"].read()
+# Download the model using the URL link
+model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
+response = requests.get(model_url)
+model = joblib.load(BytesIO(response.content))
 
+# Load the model with custom layer
+with tf.keras.utils.custom_object_scope(custom_objects):
+    model = joblib.load(BytesIO(response.content))
+    
 # Load the model with custom layer
 with tf.keras.utils.custom_object_scope(custom_objects):
     model = joblib.load(BytesIO(model_bytes))
