@@ -193,7 +193,6 @@ st.write(
         
     """)
 
-@st.cache_data()
 # Download the model file using the sharing link
 url = "https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing"
 output = "model_use"
