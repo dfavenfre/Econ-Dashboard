@@ -193,7 +193,7 @@ st.write(
         
     """)
 
-model = load_model("C:\Users\Tolga\Desktop\streamlit apps\model_use.h5")
+model = load_model(r"C:\Users\Tolga\Desktop\streamlit apps\model_use.h5")
     
 # Function to make prediction on new text
 def predict_sentiment(text):
