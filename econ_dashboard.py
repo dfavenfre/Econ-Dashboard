@@ -195,9 +195,14 @@ st.write(
 import joblib
 import requests
 
-model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use.pkl"
-response = requests.get(model_url)
-model = joblib.load(response.content)
+@st.cache_data(allow_output_mutation=True)
+def load_model():
+    model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
+    response = requests.get(model_url)
+    return joblib.load(response.content)
+
+# Load the model
+model = load_model()
 
 
 # Function to make prediction on new text
