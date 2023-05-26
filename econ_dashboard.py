@@ -249,7 +249,7 @@ else:
 
 
 # Function to make prediction on new text
-def predict_sentiment(text):
+def predict_sentiment(text, model):
     # Make prediction
     prediction = tf.squeeze(model.predict([text]))
     return prediction
@@ -264,7 +264,7 @@ submit_button = st.button("Predict")
 
 if submit_button and text_input:
     # Make prediction
-    prediction = predict_sentiment(text_input)
+    prediction = predict_sentiment(text_input, model)
     sentiment_label = get_sentiment_label(prediction)
     confidence = prediction.max() * 100
 
