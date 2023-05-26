@@ -198,6 +198,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import requests
 from io import BytesIO
+import streamlit as st
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -219,17 +220,17 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
 response = requests.get(model_url)
 
-# Load the model with custom layer
-with tf.keras.utils.custom_object_scope(custom_objects):
-    model = joblib.load(BytesIO(response.content))
+# Debug: Check if the response is successful
+st.write("Response status code:", response.status_code)
 
 # Load the model with custom layer
 with tf.keras.utils.custom_object_scope(custom_objects):
-    model = joblib.load(BytesIO(response.content))
-    
-# Load the model with custom layer
-with tf.keras.utils.custom_object_scope(custom_objects):
-    model = joblib.load(BytesIO(model_bytes))
+    try:
+        model = joblib.load(BytesIO(response.content))
+        st.write("Model loaded successfully")
+    except Exception as e:
+        st.write("Error loading the model:", str(e))
+
 
 # Function to make prediction on new text
 def predict_sentiment(text):
