@@ -194,6 +194,7 @@ st.write(
     """)
 import requests
 from io import BytesIO
+import joblib
 
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
 response = requests.get(model_url)
