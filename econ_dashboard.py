@@ -192,11 +192,18 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-from transformers import TFBertModel
+import requests
+from transformers import TFAutoModel
 
 def main():
-    # Load the model and config from Hugging Face Hub
-    model = TFBertModel.from_pretrained("dfavenfre/model_use", config="dfavenfre/model_use/config.json")
+    # Fetch the config.json from GitHub
+    config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
+    response = requests.get(config_url)
+    config_json = response.json()
+
+    # Load the model using the fetched config and the model name from Hugging Face Hub
+    model_name = "dfavenfre/model_use"
+    model = TFAutoModel.from_pretrained(model_name, config=config_json)
     st.write("Model loaded successfully!")
 
 if __name__ == "__main__":
