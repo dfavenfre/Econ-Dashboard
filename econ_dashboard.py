@@ -192,7 +192,6 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-
 import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -244,7 +243,8 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
     joblib.dump(model, "model_use2.pkl")
 
 else:
-    st.write("Error downloading the model. Please check the model URL.")
+    print("Error downloading the model. Please check the model URL.")
+
 
 
 
