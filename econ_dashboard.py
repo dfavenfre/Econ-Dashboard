@@ -193,8 +193,10 @@ st.write(
         
     """)
 
-from huggingface_hub import from_pretrained_keras
-model = from_pretrained_keras("dfavenfre/model_use")
+from transformers import TFAutoModel
+# Save the model and config
+model = TFAutoModel.from_pretrained("dfavenfre/model_use")
+model.save_pretrained("model_use")
 
 # Function to make prediction on new text
 def predict_sentiment(text):
