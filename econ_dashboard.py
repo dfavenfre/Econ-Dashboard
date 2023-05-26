@@ -195,11 +195,15 @@ st.write(
 import requests
 from transformers import TFAutoModel
 
+import requests
+import json
+from transformers import TFAutoModel
+
 def main():
     # Fetch the config.json from GitHub
     config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
     response = requests.get(config_url)
-    config_json = response.json()
+    config_json = json.loads(response.content)
 
     # Load the model using the fetched config and the model name from Hugging Face Hub
     model_name = "dfavenfre/model_use"
@@ -208,7 +212,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+    
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
