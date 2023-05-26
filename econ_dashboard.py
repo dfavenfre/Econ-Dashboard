@@ -201,6 +201,7 @@ def main():
     config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
     response = requests.get(config_url)
     content = response.content.decode("utf-8")
+    st.write(content)  # Print the content for debugging purposes
     config_json = json.loads(content)
 
     # Load the model from the config
