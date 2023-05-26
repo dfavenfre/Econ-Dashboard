@@ -196,7 +196,8 @@ st.write(
 import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
-from huggingface_hub import from_pretrained_keras
+import requests
+from io import BytesIO
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -215,12 +216,17 @@ class USEEncoderLayer(tf.keras.layers.Layer):
 custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
 
 # Download the model from Hugging Face Model Hub
-model = from_pretrained_keras("dfavenfre/model_use")
+model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use.zip"
+response = requests.get(model_url)
+zip_file = BytesIO(response.content)
 
+# Extract the model from the zip file
+import zipfile
+with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+    zip_ref.extractall('/content/model_use')
 
 # Load the model with custom layer
-with tf.keras.utils.custom_object_scope(custom_objects):
-    model.load_weights(model.config.local_path)
+model = tf.keras.models.load_model('/content/model_use', custom_objects=custom_objects)
 
 # Optional: Save the model
 joblib.dump(model, "/content/model_use2.pkl")
