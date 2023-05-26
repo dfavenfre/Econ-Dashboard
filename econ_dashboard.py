@@ -196,13 +196,6 @@ st.write(
 import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
-import boto3
-import requests
-from io import BytesIO
-
-import joblib
-import tensorflow as tf
-import tensorflow_hub as hub
 import requests
 from io import BytesIO
 
@@ -225,7 +218,10 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 # Download the model using the URL link
 model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
 response = requests.get(model_url)
-model = joblib.load(BytesIO(response.content))
+
+# Load the model with custom layer
+with tf.keras.utils.custom_object_scope(custom_objects):
+    model = joblib.load(BytesIO(response.content))
 
 # Load the model with custom layer
 with tf.keras.utils.custom_object_scope(custom_objects):
