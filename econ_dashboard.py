@@ -193,13 +193,13 @@ st.write(
         
     """)
 
-from transformers import TFAutoModel
-# Load the model
-model = TFAutoModel.from_pretrained("dfavenfre/model_use")
-# Get the configuration
-config = model.config
-# Save the model and config
-model.save_pretrained("model_use", saved_model=True, config=config)
+def main():
+    # Load the model and config from Hugging Face Hub
+    model = TFAutoModel.from_pretrained("dfavenfre/model_use", config="dfavenfre/model_use")
+    st.write("Model loaded successfully!")
+
+if __name__ == "__main__":
+    main()
 
 # Function to make prediction on new text
 def predict_sentiment(text):
