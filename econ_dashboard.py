@@ -194,15 +194,8 @@ st.write(
     """)
 
 import tensorflow as tf
-# Open the model file
-with h5py.File("model_use.h5", "r") as file:
-    # Load the model architecture
-    json_model = file.attrs["model_config"]
-    model = tf.keras.models.model_from_json(json_model)
-
-    # Load the model weights
-    model.load_weights("model_use_v1.h5")
-
+# Load the model
+model = tf.keras.models.load_model("model_use.h5")
 # Print the model summary
 model.summary()
     
