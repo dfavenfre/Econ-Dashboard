@@ -193,7 +193,7 @@ st.write(
         
     """)
 
-import wget
+
 from tensorflow.keras.models import load_model
 
 # Download the model file
