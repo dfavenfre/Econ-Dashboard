@@ -192,13 +192,13 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
 import requests
 import shutil
 import zipfile
 import os
+import streamlit as st
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -240,14 +240,14 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
         zip_ref.extractall(extract_dir)
 
     # Load the model with custom layer
-    model_file = os.path.join(extract_dir, "model_use2.pkl")
+    model_file = os.path.join(extract_dir, "model_use2")
     if os.path.isfile(model_file):
-        model = joblib.load(model_file)
+        model = tf.keras.models.load_model(model_file, custom_objects=custom_objects)
     else:
         st.write("Error: Model file not found.")
 
     # Optional: Save the model
-    joblib.dump(model, "model_use2.pkl")
+    model.save("model_use2")
 
 st.write("Model:", model)
 
