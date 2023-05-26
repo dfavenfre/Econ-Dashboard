@@ -240,7 +240,8 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
         zip_ref.extractall(extract_dir)
 
     # Load the model with custom layer
-    model = tf.keras.models.load_model(extract_dir, custom_objects=custom_objects)
+    model_path = os.path.join(extract_dir, "model_use2.pkl")
+    model = joblib.load(model_path)
 
     # Optional: Save the model
     joblib.dump(model, "model_use2.pkl")
