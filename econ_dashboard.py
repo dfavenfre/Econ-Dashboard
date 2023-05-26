@@ -199,6 +199,7 @@ import tensorflow_hub as hub
 import requests
 import shutil
 import zipfile
+import os
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -220,19 +221,25 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use.zip"
 response = requests.get(model_url, stream=True)
 
+# Define the path to save the downloaded zip file
+zip_file = "model_use.zip"
+
 # Save the downloaded zip file to disk
-with open("/content/model_use.zip", "wb") as file:
+with open(zip_file, "wb") as file:
     shutil.copyfileobj(response.raw, file)
 
 # Extract the model from the zip file
-with zipfile.ZipFile("/content/model_use.zip", "r") as zip_ref:
-    zip_ref.extractall("/content/model_use")
+extract_dir = "model_use"
+os.makedirs(extract_dir, exist_ok=True)
+
+with zipfile.ZipFile(zip_file, "r") as zip_ref:
+    zip_ref.extractall(extract_dir)
 
 # Load the model with custom layer
-model = tf.keras.models.load_model("/content/model_use", custom_objects=custom_objects)
+model = tf.keras.models.load_model(extract_dir, custom_objects=custom_objects)
 
 # Optional: Save the model
-joblib.dump(model, "/content/model_use2.pkl")
+joblib.dump(model, "model_use2.pkl")
 
 
 
