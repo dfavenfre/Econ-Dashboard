@@ -197,7 +197,7 @@ st.write(
 from tensorflow.keras.models import load_model
 
 model = load_model("Econ-Dashboard/model_use.h5")
-    
+st.write(model.summary())
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
