@@ -217,6 +217,7 @@ custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLay
 # Download the model from Hugging Face Model Hub
 model = from_pretrained_keras("dfavenfre/model_use")
 
+@st.cache_data()
 # Load the model with custom layer
 with tf.keras.utils.custom_object_scope(custom_objects):
     model.load_weights(model.config.local_path)
