@@ -194,7 +194,7 @@ st.write(
     """)
 
 import joblib 
-model = joblib.load(open("model_use.pkl","rb"))
+model = joblib.load(open("./model_use.pkl","rb"))
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
