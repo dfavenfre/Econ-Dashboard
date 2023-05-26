@@ -196,10 +196,7 @@ st.write(
 from transformers import TFAutoModel, AutoConfig
 
 model_name = "dfavenfre/model_use"
-config_name = "dfavenfre/config"  # Assuming the config.json file is in the same location as the model
-
-config = AutoConfig.from_pretrained(config_name)
-model = TFAutoModel.from_pretrained(model_name, config=config)
+model = TFAutoModel.from_pretrained(model_name, config="dfavenfre/config")
 
 # Function to make prediction on new text
 def predict_sentiment(text):
