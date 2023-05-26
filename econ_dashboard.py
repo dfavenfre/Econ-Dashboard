@@ -192,66 +192,18 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import tensorflow as tf
-from transformers import TFAutoModelForSequenceClassification, AutoTokenizer
+import pickle
 import requests
-import shutil
-import zipfile
-import os
-import joblib
-import streamlit as st
+from io import BytesIO
 
-# Download the model from Hugging Face Model Hub
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
-response = requests.get(model_url, stream=True)
-
-# Load the model
-model = None
-
-# Check if the response is successful
-if response.status_code == 200:
-    # Define the path to save the downloaded model file
-    model_file = "model_use2.pkl"
-
-    # Save the downloaded model file to disk
-    with open(model_file, "wb") as file:
-        shutil.copyfileobj(response.raw, file)
-
-    # Load the model
-    if os.path.isfile(model_file):
-        model = joblib.load(model_file)
-    else:
-        st.write("Error: Model file not found.")
-
-st.write("Model:", model)
-
-# Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-imdb")
-
-# Function to preprocess text and convert it to model input
-def preprocess_text(text):
-    # Preprocess the text
-    text = text.strip()
-
-    # Tokenize the text
-    inputs = tokenizer.encode_plus(
-        text,
-        add_special_tokens=True,
-        return_tensors="tf",
-        padding="max_length",
-        truncation=True,
-        max_length=512,
-    )
-
-    return inputs
-
+response = requests.get(model_url)
+model = joblib.load(BytesIO(response.content))
+st.write("model":model)
 # Function to make prediction on new text
-def predict_sentiment(text, model):
-    # Preprocess the text
-    inputs = preprocess_text(text)
-
+def predict_sentiment(text):
     # Make prediction
-    prediction = model.predict(inputs)[0]
+    prediction = tf.squeeze(model.predict([text]))
     return prediction
 
 def get_sentiment_label(pred):
@@ -262,17 +214,12 @@ def get_sentiment_label(pred):
 text_input = st.text_area("Enter the text:", value='')
 submit_button = st.button("Predict")
 
-st.write("Text Input:", text_input)
-
-if submit_button and text_input and model:
+if submit_button and text_input:
     # Make prediction
-    prediction = predict_sentiment(text_input, model)
+    prediction = predict_sentiment(text_input)
     sentiment_label = get_sentiment_label(prediction)
     confidence = prediction.max() * 100
 
     # Output the result
     output = f"{sentiment_label.capitalize()} : [Confidence: {confidence:.2f}%]"
     st.write("Sentiment Prediction:", output)
-else:
-    st.write("Model not loaded or text input missing")
-
