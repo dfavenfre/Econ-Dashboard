@@ -193,11 +193,16 @@ st.write(
         
     """)
 
+import requests
 from tensorflow.keras.models import load_model
-import tensorflow_hub as hub
+model_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/blob/main/model_use.h5"
+# Download the model file
+response = requests.get(model_url)
+with open("model_use.h5", "wb") as file:
+    file.write(response.content)
 
-custom_objects = {'KerasLayer': hub.KerasLayer}
-model = load_model("model_use.h5", custom_objects=custom_objects)
+# Load the model
+model = load_model("model_use.h5")
     
 # Function to make prediction on new text
 def predict_sentiment(text):
