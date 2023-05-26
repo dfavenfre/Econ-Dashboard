@@ -200,7 +200,6 @@ import zipfile
 import os
 import joblib
 import streamlit as st
-from tensorflow.python.keras.layers import deserialize, serialize
 from tensorflow.python.keras.saving import saving_utils
 
 # Define the custom layer
@@ -217,15 +216,13 @@ class USEEncoderLayer(tf.keras.layers.Layer):
         return self.use_layer(inputs)
 
 # Register the custom layer
-def use_encoder_layer_unpickle(layer_cls, config):
-    return USEEncoderLayer(**config)
-
 def use_encoder_layer_pickle(layer):
-    config = {}
-    return use_encoder_layer_unpickle, (USEEncoderLayer, config)
+    return "USEEncoderLayer", {}
 
-serialize.register_serialized_type(USEEncoderLayer, use_encoder_layer_pickle)
-deserialize.register_serialized_type("USEEncoderLayer", use_encoder_layer_unpickle)
+def use_encoder_layer_unpickle(name, custom_objects):
+    return USEEncoderLayer()
+
+saving_utils.custom_object_scope({'USEEncoderLayer': use_encoder_layer_unpickle})
 
 # Download the model from Hugging Face Model Hub
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
@@ -278,3 +275,4 @@ if submit_button and text_input and model:
     st.write("Sentiment Prediction:", output)
 else:
     st.write("Model not loaded or text input missing")
+
