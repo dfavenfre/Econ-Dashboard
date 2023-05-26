@@ -240,7 +240,6 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
         zip_ref.extractall(extract_dir)
 
     # Load the model with custom layer
-    model_path = os.path.join(extract_dir, "model_use2.pkl")
     model_file = os.path.join(extract_dir, "model_use2.pkl")
     if os.path.isfile(model_file):
         model = joblib.load(model_file)
