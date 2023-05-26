@@ -193,7 +193,7 @@ st.write(
         
     """)
 import tensorflow as tf
-import tensorflow_text as text
+from transformers import TFAutoModelForSequenceClassification, AutoTokenizer
 import requests
 import shutil
 import zipfile
@@ -225,20 +225,33 @@ if response.status_code == 200:
 
 st.write("Model:", model)
 
-# Function to preprocess text
+# Load the tokenizer
+tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-imdb")
+
+# Function to preprocess text and convert it to model input
 def preprocess_text(text):
-    # Preprocess the text (lowercase and remove punctuation)
-    text = tf.strings.lower(text)
-    text = tf.strings.regex_replace(text, '[%s]' % tf.strings.join('', text.text.split()).numpy().decode("utf-8"), '')
-    return text
+    # Preprocess the text
+    text = text.strip()
+
+    # Tokenize the text
+    inputs = tokenizer.encode_plus(
+        text,
+        add_special_tokens=True,
+        return_tensors="tf",
+        padding="max_length",
+        truncation=True,
+        max_length=512,
+    )
+
+    return inputs
 
 # Function to make prediction on new text
 def predict_sentiment(text, model):
     # Preprocess the text
-    text = preprocess_text(text)
+    inputs = preprocess_text(text)
 
     # Make prediction
-    prediction = model.predict([text])[0]
+    prediction = model.predict(inputs)[0]
     return prediction
 
 def get_sentiment_label(pred):
@@ -262,3 +275,4 @@ if submit_button and text_input and model:
     st.write("Sentiment Prediction:", output)
 else:
     st.write("Model not loaded or text input missing")
+
