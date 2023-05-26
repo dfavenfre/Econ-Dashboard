@@ -217,7 +217,7 @@ class USEEncoderLayer(tf.keras.layers.Layer):
 custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
 
 # Download the model from S3 bucket
-s3_bucket_name = "dfavenfre"
+s3_bucket_name = "modeluse"
 model_key = "model_use2.pkl"
 s3 = boto3.client("s3")
 response = s3.get_object(Bucket=s3_bucket_name, Key=model_key)
