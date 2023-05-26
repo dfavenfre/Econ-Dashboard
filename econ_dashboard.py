@@ -193,14 +193,10 @@ st.write(
         
     """)
 
-# Download the model file using the sharing link
-import gdown
-url = "https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing"
-output = "model_use"
-gdown.download(url, output, quiet=False)
-# Load the model from the SavedModel format
-model = tf.keras.models.load_model("model_use")
+from huggingface_hub import from_pretrained_keras
 
+model = from_pretrained_keras("dfavenfre/model_use")
+@st.cache_data()
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
