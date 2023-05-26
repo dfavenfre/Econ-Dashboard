@@ -193,18 +193,24 @@ st.write(
         
     """)
 
-import gdown
-import pickle
-import tensorflow as tf
+@st.cache_data()
+def load_model():
 
-url = "https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=share_link"
-output = "model_use.h5"
-gdown.download(url, output, quiet=False)
+    save_dest = Path('model')
+    save_dest.mkdir(exist_ok=True)
+    
+    f_checkpoint = Path("https://drive.google.com/file/d/1Lq8wEOTeKSHARHdBQlQMgtiyhvPjfKY4/view?usp=sharing")
 
-# Load the model from the downloaded file
-with open("model_use.pkl", "rb") as f:
-    model = pickle.load(f)
+    if not f_checkpoint.exists():
+        with st.spinner("Downloading model... this may take awhile! \n Don't stop it!"):
+            from GD_download import download_file_from_google_drive
+            download_file_from_google_drive(cloud_model_location, f_checkpoint)
+    
+    model = torch.load(f_checkpoint, map_location=device)
+    model.eval()
+    return model
 
+model = load_model()
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
