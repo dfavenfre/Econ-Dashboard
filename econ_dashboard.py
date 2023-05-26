@@ -193,14 +193,6 @@ st.write(
         
     """)
 
-import requests
-from tensorflow.keras.models import load_model
-model_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/blob/main/model_use.h5"
-# Download the model file
-response = requests.get(model_url)
-with open("model_use.h5", "wb") as file:
-    file.write(response.content)
-
 # Load the model
 model = load_model("model_use.h5")
     
