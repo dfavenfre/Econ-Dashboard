@@ -198,6 +198,7 @@ import requests
 import shutil
 import zipfile
 import os
+import joblib
 import streamlit as st
 
 # Define the custom layer
@@ -217,41 +218,33 @@ class USEEncoderLayer(tf.keras.layers.Layer):
 custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
 
 # Download the model from Hugging Face Model Hub
-model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use.zip"
+model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
 response = requests.get(model_url, stream=True)
 
-# Load the model with custom layer
+# Load the model
 model = None
 
-# Check if the response is successful and the content type is zip
-if response.status_code == 200 and response.headers.get("content-type") == "application/zip":
-    # Define the path to save the downloaded zip file
-    zip_file = "model_use.zip"
+# Check if the response is successful
+if response.status_code == 200:
+    # Define the path to save the downloaded model file
+    model_file = "model_use2.pkl"
 
-    # Save the downloaded zip file to disk
-    with open(zip_file, "wb") as file:
+    # Save the downloaded model file to disk
+    with open(model_file, "wb") as file:
         shutil.copyfileobj(response.raw, file)
 
-    # Extract the model from the zip file
-    extract_dir = "model_use"
-    os.makedirs(extract_dir, exist_ok=True)
-
-    with zipfile.ZipFile(zip_file, "r") as zip_ref:
-        zip_ref.extractall(extract_dir)
-
-    # Load the model with custom layer
-    model_dir = os.path.join(extract_dir, "model_use2")
-    if os.path.isdir(model_dir):
-        model = tf.saved_model.load(model_dir, custom_objects=custom_objects)
+    # Load the model
+    if os.path.isfile(model_file):
+        model = joblib.load(model_file)
     else:
-        st.write("Error: Model directory not found.")
+        st.write("Error: Model file not found.")
 
 st.write("Model:", model)
 
 # Function to make prediction on new text
 def predict_sentiment(text, model):
     # Make prediction
-    prediction = tf.squeeze(model(text))
+    prediction = tf.squeeze(model.predict([text]))
     return prediction
 
 def get_sentiment_label(pred):
@@ -266,7 +259,7 @@ st.write("Text Input:", text_input)
 
 if submit_button and text_input and model:
     # Make prediction
-    prediction = predict_sentiment([text_input], model)
+    prediction = predict_sentiment(text_input, model)
     sentiment_label = get_sentiment_label(prediction)
     confidence = prediction.max() * 100
 
