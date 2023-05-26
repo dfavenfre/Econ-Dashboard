@@ -193,7 +193,11 @@ st.write(
         
     """)
 
-model = load_model("model_use.h5", "rb")
+from tensorflow.keras.models import load_model
+import tensorflow_hub as hub
+
+custom_objects = {'KerasLayer': hub.KerasLayer}
+model = load_model("model_use.h5", custom_objects=custom_objects)
     
 # Function to make prediction on new text
 def predict_sentiment(text):
