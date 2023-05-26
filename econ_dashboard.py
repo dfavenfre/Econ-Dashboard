@@ -241,7 +241,11 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
 
     # Load the model with custom layer
     model_path = os.path.join(extract_dir, "model_use2.pkl")
-    model = joblib.load(model_path)
+    model_file = os.path.join(extract_dir, "model_use2.pkl")
+    if os.path.isfile(model_file):
+        model = joblib.load(model_file)
+    else:
+        st.write("Error: Model file not found.")
 
     # Optional: Save the model
     joblib.dump(model, "model_use2.pkl")
