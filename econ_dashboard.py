@@ -245,6 +245,8 @@ if response.status_code == 200 and response.headers.get("content-type") == "appl
     # Optional: Save the model
     joblib.dump(model, "model_use2.pkl")
 
+print("Model:", model)
+
 # Function to make prediction on new text
 def predict_sentiment(text, model):
     # Make prediction
@@ -258,6 +260,8 @@ def get_sentiment_label(pred):
 
 text_input = st.text_area("Enter the text:", value='')
 submit_button = st.button("Predict")
+
+print("Text Input:", text_input)
 
 if submit_button and text_input and model:
     # Make prediction
