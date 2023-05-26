@@ -192,13 +192,13 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import pickle
+import joblib
 import requests
 from io import BytesIO
 
 model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
 response = requests.get(model_url)
-model = pickle.load(BytesIO(response.content))
+model = joblib.load(BytesIO(response.content))
 
 # Function to make prediction on new text
 def predict_sentiment(text):
