@@ -196,9 +196,7 @@ st.write(
 import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
-import requests
-from io import BytesIO
-import streamlit as st
+from huggingface_hub import from_pretrained_keras
 
 # Define the custom layer
 class USEEncoderLayer(tf.keras.layers.Layer):
@@ -216,22 +214,19 @@ class USEEncoderLayer(tf.keras.layers.Layer):
 # Register the custom layer
 custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
 
-# Download the model using the URL link
-model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
-response = requests.get(model_url)
-
-# Debug: Check if the response is successful
-st.write("Response status code:", response.status_code)
+# Download the model from Hugging Face Model Hub
+model = from_pretrained_keras("dfavenfre/model_use")
 
 # Load the model with custom layer
 with tf.keras.utils.custom_object_scope(custom_objects):
-    try:
-        model = joblib.load(BytesIO(response.content))
-        st.write("Model loaded successfully")
-    except Exception as e:
-        st.write("Error loading the model:", str(e))
+    model.load_weights(model.config.local_path)
 
+# Optional: Save the model
+joblib.dump(model, "/content/model_use2.pkl")
 
+# Load the model with custom layer
+with tf.keras.utils.custom_object_scope(custom_objects):
+    model = joblib.load("/content/model_use2.pkl")
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
