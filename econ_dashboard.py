@@ -195,7 +195,7 @@ st.write(
 import joblib
 import requests
 
-@st.cache_data(allow_output_mutation=True)
+@st.cache_data()
 def load_model():
     model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
     response = requests.get(model_url)
