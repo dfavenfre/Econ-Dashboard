@@ -192,14 +192,19 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import pickle
 import requests
 from io import BytesIO
 
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
 response = requests.get(model_url)
-model = joblib.load(BytesIO(response.content))
-st.write("model",model)
+
+if response.status_code == 200:
+    model = joblib.load(BytesIO(response.content))
+    st.write("model", model)
+else:
+    st.write("Failed to download the model.")
+
+
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
