@@ -200,7 +200,8 @@ def main():
     # Fetch the config.json from GitHub
     config_url = "https://raw.githubusercontent.com/dfavenfre/Econ-Dashboard/main/config.json?token=GHSAT0AAAAAAB52T47KMXIUQIN5I6G2N6QUZDQTCUQ"
     response = requests.get(config_url)
-    config_json = response.json()
+    content = response.content.decode("utf-8")
+    config_json = json.loads(content)
 
     # Load the model from the config
     model = tf.keras.models.model_from_json(json.dumps(config_json['config']))
