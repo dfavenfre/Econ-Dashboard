@@ -192,13 +192,40 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
+
 import joblib
+import tensorflow as tf
+import tensorflow_hub as hub
+import boto3
 import requests
 from io import BytesIO
 
-model_url = "https://modeluse.s3.eu-north-1.amazonaws.com/model_use2.pkl"
-response = requests.get(model_url)
-model = joblib.load(BytesIO(response.content))
+# Define the custom layer
+class USEEncoderLayer(tf.keras.layers.Layer):
+    def __init__(self, **kwargs):
+        super(USEEncoderLayer, self).__init__(**kwargs)
+        self.use_layer = hub.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder/4",
+                                        input_shape=[],  # check the important notes
+                                        dtype=tf.string,
+                                        trainable=False,
+                                        name="USE_encoder")
+
+    def call(self, inputs, **kwargs):
+        return self.use_layer(inputs)
+
+# Register the custom layer
+custom_objects = {"USEEncoderLayer": USEEncoderLayer, "KerasLayer": hub.KerasLayer}
+
+# Download the model from S3 bucket
+s3_bucket_name = "dfavenfre"
+model_key = "model_use2.pkl"
+s3 = boto3.client("s3")
+response = s3.get_object(Bucket=s3_bucket_name, Key=model_key)
+model_bytes = response["Body"].read()
+
+# Load the model with custom layer
+with tf.keras.utils.custom_object_scope(custom_objects):
+    model = joblib.load(BytesIO(model_bytes))
 
 # Function to make prediction on new text
 def predict_sentiment(text):
