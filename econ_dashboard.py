@@ -194,10 +194,19 @@ st.write(
     """)
 
 
+import os
 from tensorflow.keras.models import load_model
 
-model = load_model("Econ-Dashboard/model_use.h5")
-st.write(model.summary())
+# Get the absolute path of the model file
+model_file = "model_use.h5"
+model_path = os.path.join(os.getcwd(), model_file)
+
+# Load the model
+model = load_model(model_path)
+
+# Print the model summary
+model.summary()
+
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
