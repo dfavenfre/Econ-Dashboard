@@ -68,12 +68,7 @@ st.write(
     """
 )
 
-# Side-bar Warning
-st.sidebar.write(
-    """
-    **Select A Time Interval and Time Frame**
-    """
-)
+
 # Date and Interval
 selected_date = st.date_input("Select A Date", 
                   value=datetime.today().date(),
