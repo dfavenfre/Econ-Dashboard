@@ -192,20 +192,11 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-import requests
-from io import BytesIO
-import joblib
 
-model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
-response = requests.get(model_url)
+from transformers import AutoModel
 
-if response.status_code == 200:
-    model = joblib.load(BytesIO(response.content))
-    st.write("model", model)
-else:
-    st.write("Failed to download the model.")
-
-
+model = AutoModel.from_pretrained("dfavenfre/model_use")
+st.write("model", model)
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
