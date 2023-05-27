@@ -194,24 +194,30 @@ st.write(
     """)
 
 import wget
-
-tokenizer_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/tokenizer.pkl"
-tokenizer_path = "tokenizer.pkl"
+import zipfile
+import tensorflow as tf
 
 # Download the tokenizer file
+tokenizer_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/tokenizer.pkl"
+tokenizer_path = "tokenizer.pkl"
 wget.download(tokenizer_url, tokenizer_path)
-# Load tokenizer from the saved file
-with open("tokenizer.pkl", "rb") as f:
+
+# Load the tokenizer from the saved file
+with open(tokenizer_path, "rb") as f:
     tokenizer = pickle.load(f)
+
 # Unzip the model file
-model_zip_path = f"{Econ-Dashboard}/{my_h5_model.zip}"
-with zipfile.ZipFile(h5_model, 'r') as zip_ref:
+model_zip_url = "https://github.com/dfavenfre/Econ-Dashboard/raw/main/my_h5_model.zip"
+model_zip_path = "my_h5_model.zip"
+unzip_dir = "model.h5"
+
+wget.download(model_zip_url, model_zip_path)
+
+with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
     zip_ref.extractall(unzip_dir)
 
-
-model_dir = "Econ-Dashboard/h5_model"
-
 # Load the saved model
+model_dir = "model.h5"
 model = tf.keras.models.load_model(model_dir)
     
 # Example usage: make predictions
