@@ -16,11 +16,10 @@ import streamlit as st
 from datetime import datetime
 import yfinance as yf
 import pandas as pd
-
 from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
 from database import get_calendar, update_calendar, get_currencies, update_currency, get_stocks, update_stocks, get_commodities, update_commodities, get_bonds, update_bonds, get_crypto, update_crypto, get_earnings, update_earnings
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 # Welcome to Econ Dashboard (Beta) 
 title_html = """
     <h1 style="color:black; font-size:36px;">Welcome to Econ Dashboard <span style="font-size:14px;">BETA</span></h1>
