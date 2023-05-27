@@ -193,15 +193,23 @@ st.write(
         
     """)
 
+import wget
 
+tokenizer_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/tokenizer.pkl"
+tokenizer_path = "tokenizer.pkl"
 
+# Download the tokenizer file
+wget.download(tokenizer_url, tokenizer_path)
+# Load tokenizer from the saved file
+with open("tokenizer.pkl", "rb") as f:
+    tokenizer = pickle.load(f)
 # Unzip the model file
-model_zip_path = f"{dfavenfre/Econ-Dashboard}/{my_h5_model.zip}"
+model_zip_path = f"{Econ-Dashboard}/{my_h5_model.zip}"
 with zipfile.ZipFile(h5_model, 'r') as zip_ref:
     zip_ref.extractall(unzip_dir)
 
 
-model_dir = "dfavenfre/Econ-Dashboard/h5_model"
+model_dir = "Econ-Dashboard/h5_model"
 
 # Load the saved model
 model = tf.keras.models.load_model(model_dir)
