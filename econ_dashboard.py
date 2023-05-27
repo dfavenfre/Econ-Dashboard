@@ -38,8 +38,6 @@ st.sidebar.markdown(
         <h3>About Econ Dashboard</h3>
         <ul>
             <li> A centralized dashboard for screening and downloading Stock/ETF/FX/Economic Data, as well as viewing Forex, Metal, Energy, and Crypto Calendars.</li>
-            <li> Stay ahead of the market with an advanced sentiment classifier, which accurately evaluates the sentiment of economic/financial commentary, reports, and social media posts.</li>
-            <li> Make better-informed investment decisions with powerful LSTM model, leveraging deep learning technology for enhanced Time-Series forecasting</li>
         </ul>
     """.format(sidebar_text_style),
     unsafe_allow_html=True
@@ -52,11 +50,11 @@ st.sidebar.write(
     """
 )
 # Date and Interval
-selected_date = st.sidebar.date_input("Select A Date", 
+selected_date = st.date_input("Select A Date", 
                   value=datetime.today().date(),
                   min_value=datetime(2000, 1, 1).date(),
                   max_value=datetime.today().date())
-selected_timeframe = st.sidebar.selectbox("Select A Time Frame",
+selected_timeframe = st.selectbox("Select A Time Frame",
                                          ["5m","15m","1h","1d"])
 
 # Social Hubs
@@ -176,77 +174,3 @@ if data_option == "Earnings":
     if st.button("Get Data"):
         earnings_data = get_earnings()
         st.dataframe(earnings_data, width=800)  
-
-
-## Sentiment Analysis
-st.title("Sentiment Analysis")
-st.write(
-    """
-    Example Of Usage: 
-        
-        Prompt: 
-        "The European auto industry is committed to further reducing emissions," ACEA Director General Sigrid de Vries said in a statement. 
-        "However, the Euro 7 proposal is simply not the right way to do this, as it would have an extremely low environmental impact at an extremely high cost."
-
-        Output: 
-        Negative : [Probability: 78%]  
-        
-    """)
-
-import wget
-import zipfile
-import tensorflow as tf
-
-# Download the tokenizer file
-tokenizer_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/tokenizer.pkl"
-tokenizer_path = "tokenizer.pkl"
-wget.download(tokenizer_url, tokenizer_path)
-
-# Load the tokenizer from the saved file
-with open(tokenizer_path, "rb") as f:
-    tokenizer = pickle.load(f)
-
-# Unzip the model file
-model_zip_url = "https://github.com/dfavenfre/Econ-Dashboard/raw/main/my_h5_model.zip"
-model_zip_path = "my_h5_model.zip"
-unzip_dir = "model"
-
-wget.download(model_zip_url, model_zip_path)
-
-with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
-    zip_ref.extractall(unzip_dir)
-
-# Load the saved model
-model_file = "model/model.h5"
-model = tf.keras.models.load_model(model_file)
-
-
-    
-# Example usage: make predictions
-input_text = input("Enter a sentence: ")
-prediction = model.predict(input_text)
-print("Prediction:", prediction)
-    
-# Function to make prediction on new text
-def predict_sentiment(text):
-    # Make prediction
-    prediction = tf.squeeze(model.predict([text]))
-    return prediction
-
-def get_sentiment_label(pred):
-    sentiment_label = ["Negative", "Neutral", "Positive"]
-    max_index = pred.argmax()
-    return sentiment_label[max_index]
-
-text_input = st.text_area("Enter the text:", value='')
-submit_button = st.button("Predict")
-
-if submit_button and text_input:
-    # Make prediction
-    prediction = predict_sentiment(text_input)
-    sentiment_label = get_sentiment_label(prediction)
-    confidence = prediction.max() * 100
-
-    # Output the result
-    output = f"{sentiment_label.capitalize()} : [Confidence: {confidence:.2f}%]"
-    st.write("Sentiment Prediction:", output)
