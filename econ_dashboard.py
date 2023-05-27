@@ -195,21 +195,17 @@ st.write(
 
 
 
-import requests
-import pickle
-
-model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
-
-# Download the model file
-response = requests.get(model_url)
-with open("model_use2.pkl", "wb") as f:
-    f.write(response.content)
-
-# Load the model
-with open("model_use2.pkl", "rb") as f:
-    model = pickle.load(f)
+# Unzip the model file
+model_zip_path = f"{dfavenfre/Econ-Dashboard}/{my_h5_model.zip}"
+with zipfile.ZipFile(h5_model, 'r') as zip_ref:
+    zip_ref.extractall(unzip_dir)
 
 
+model_dir = "dfavenfre/Econ-Dashboard/h5_model"
+
+# Load the saved model
+model = tf.keras.models.load_model(model_dir)
+    
 # Example usage: make predictions
 input_text = input("Enter a sentence: ")
 prediction = model.predict(input_text)
