@@ -193,12 +193,8 @@ st.write(
         
     """)
 from huggingface_hub import from_pretrained_keras
-from huggingface_hub import hf_hub_download
-from transformers import TFAutoModelForSequenceClassification
-
-hf_hub_download(repo_id="dfavenfre/model_use", filename="model_use2", cache_dir=".saved_model")
-model_path = ".saved_model/model_use2"
-model = TFAutoModelForSequenceClassification.from_pretrained(model_path)
+model_url = "https://huggingface.co/dfavenfre/model_use/blob/main/model_use2.pkl"
+model = from_pretrained_keras(model_url)
 
 # Function to make prediction on new text
 def predict_sentiment(text):
