@@ -217,8 +217,9 @@ with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
     zip_ref.extractall(unzip_dir)
 
 # Load the saved model
-model_dir = "model/model.h5"
-model = tf.keras.models.load_model(model_dir)
+model_file = "model/model.h5"
+model = tf.keras.models.load_model(model_file)
+
 
     
 # Example usage: make predictions
