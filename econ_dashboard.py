@@ -195,7 +195,7 @@ st.write(
 from huggingface_hub import from_pretrained_keras
 from huggingface_hub import hf_hub_download
 from transformers import TFAutoModel
-hf_hub_download(repo_id="dfavenfre", filename="model_use2.pkl", cache_dir=".saved_model")
+hf_hub_download(repo_id="dfavenfre/model_use", filename="model_use2.pkl", cache_dir=".saved_model")
 model = TFAutoModel.from_pretrained_keras(".\saved_model\model_use2.pkl")
 
 # Function to make prediction on new text
