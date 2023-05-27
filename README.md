@@ -1,5 +1,7 @@
 # Econ-Dashboard
 A centralized dashboard for screening and downloading Stock/ETF/FX/Economic Data, as well as viewing Forex, Metal, Energy, and Crypto Calendars.
+https://dfavenfre-econ-dashboard-econ-dashboard-h2a02u.streamlit.app/
+
 # Stock Screener
 * Stock screener is equipped with yfinance API. You can select time frame and data interval, and download the data
 
