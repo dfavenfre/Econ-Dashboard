@@ -43,20 +43,6 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-# Side-bar Warning
-st.sidebar.write(
-    """
-    **Select A Time Interval and Time Frame**
-    """
-)
-# Date and Interval
-selected_date = st.date_input("Select A Date", 
-                  value=datetime.today().date(),
-                  min_value=datetime(2000, 1, 1).date(),
-                  max_value=datetime.today().date())
-selected_timeframe = st.selectbox("Select A Time Frame",
-                                         ["5m","15m","1h","1d"])
-
 # Social Hubs
 st.sidebar.markdown(
 
@@ -81,6 +67,20 @@ st.write(
     Stock Screener Is Equipped With YahooFinanceAPI. You Can Directly Use Any Ticker/Symbol From https://finance.yahoo.com. You Can Download The Data After Running The Screener
     """
 )
+
+# Side-bar Warning
+st.sidebar.write(
+    """
+    **Select A Time Interval and Time Frame**
+    """
+)
+# Date and Interval
+selected_date = st.date_input("Select A Date", 
+                  value=datetime.today().date(),
+                  min_value=datetime(2000, 1, 1).date(),
+                  max_value=datetime.today().date())
+selected_timeframe = st.selectbox("Select A Time Frame",
+                                         ["5m","15m","1h","1d"])
 
 def convert_df(df):
     return df.to_csv().encode('utf-8')
