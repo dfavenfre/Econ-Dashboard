@@ -197,7 +197,13 @@ st.write(
 #model = from_pretrained_keras(model_url)
 
 
+import requests
+import pickle
 model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
+# Download the model file
+response = requests.get(model_url)
+with open("model_use2.pkl", "wb") as f:
+    f.write(response.content)
 # Load the model
 with open("model_use2.pkl", "rb") as f:
     model = pickle.load(f)
