@@ -8,5 +8,5 @@ A centralized dashboard for screening and downloading Stock/ETF/FX/Economic Data
 
 # Data Provider
 * Data Provider is powered with various economic and financial data, including economic calendar, FX , Stock, Earnings, Commodities, Bonds, Crypto market data.
-* 
+
 ![image](https://github.com/dfavenfre/Econ-Dashboard/assets/118773869/e0daf409-5711-4eac-8765-28c91ec8b6ca)
