@@ -192,10 +192,16 @@ st.write(
         Negative : [Probability: 78%]  
         
     """)
-from huggingface_hub import from_pretrained_keras
-model_url = "https://huggingface.co/dfavenfre/model_use/blob/main/model_use2.pkl"
-model = from_pretrained_keras(model_url)
+#from huggingface_hub import from_pretrained_keras
+#model_url = "https://huggingface.co/dfavenfre/model_use/blob/main/model_use2.pkl"
+#model = from_pretrained_keras(model_url)
 
+
+model_url = "https://huggingface.co/dfavenfre/model_use/raw/main/model_use2.pkl"
+# Load the model
+with open("model_use2.pkl", "rb") as f:
+    model = pickle.load(f)
+    
 # Function to make prediction on new text
 def predict_sentiment(text):
     # Make prediction
