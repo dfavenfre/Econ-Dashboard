@@ -209,7 +209,7 @@ with open(tokenizer_path, "rb") as f:
 # Unzip the model file
 model_zip_url = "https://github.com/dfavenfre/Econ-Dashboard/raw/main/my_h5_model.zip"
 model_zip_path = "my_h5_model.zip"
-unzip_dir = "model.h5"
+unzip_dir = "model"
 
 wget.download(model_zip_url, model_zip_path)
 
@@ -217,8 +217,9 @@ with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
     zip_ref.extractall(unzip_dir)
 
 # Load the saved model
-model_dir = "model.h5"
+model_dir = "model/model.h5"
 model = tf.keras.models.load_model(model_dir)
+
     
 # Example usage: make predictions
 input_text = input("Enter a sentence: ")
