@@ -197,7 +197,7 @@ st.write(
 #model = from_pretrained_keras(model_url)
 
 
-model_url = "https://huggingface.co/dfavenfre/model_use/raw/main/model_use2.pkl"
+model_url = "https://huggingface.co/dfavenfre/model_use/resolve/main/model_use2.pkl"
 # Load the model
 with open("model_use2.pkl", "rb") as f:
     model = pickle.load(f)
