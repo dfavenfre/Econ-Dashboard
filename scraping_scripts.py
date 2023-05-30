@@ -9,7 +9,6 @@ def fx_calendar():
     chrome_options = Options()
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--headless")
-    # Set up virtual display using XVFB (X Virtual Frame Buffer)
     xvfb_options = ["xvfb-run", "--auto-servernum", "--server-args='-screen 0 1920x1080x24'"]
     driver = webdriver.Chrome(executable_path="/usr/bin/google-chrome", options=chrome_options, service_args=xvfb_options)
     
