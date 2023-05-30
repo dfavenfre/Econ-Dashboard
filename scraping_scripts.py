@@ -9,7 +9,7 @@ def fx_calendar():
     chrome_options = Options()
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(url)
     
     table_data = driver.find_element(By.XPATH,'//div[3][@class="table-responsive panel panel-default"]')
