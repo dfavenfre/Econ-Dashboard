@@ -141,6 +141,12 @@ if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
+        wait_warning = st.warning("Forex Calendar Is Being Updated, Please Wait...")
+        time.sleep(3)
+        update_calendar()
+        calendar_data = get_calendar()
+        if calendar_data:
+            st.empty(wait_warning)
 
 if data_option == "FX Market":
     if st.button("Get Data"):
