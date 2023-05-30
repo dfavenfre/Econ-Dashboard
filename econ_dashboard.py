@@ -141,7 +141,7 @@ if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
-schedule.every(24).hours.do(update_calendar)
+
 
 if data_option == "FX Market":
     if st.button("Get Data"):
