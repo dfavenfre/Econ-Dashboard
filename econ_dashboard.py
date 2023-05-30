@@ -123,22 +123,6 @@ st.write(
     """
 )
 
-
-# Schedule the update_calendar function to run every 5 minutes
-schedule.every(5).minutes.do(update_calendar)
-schedule.every(5).minutes.do(update_currency)
-schedule.every(5).minutes.do(update_stocks)
-schedule.every(5).minutes.do(update_commodities)
-schedule.every(5).minutes.do(update_bonds)
-schedule.every(5).minutes.do(update_crypto)
-schedule.every(5).minutes.do(update_earnings)
-
-# Run the scheduled tasks indefinitely
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-
-
 from deta import Deta
 DETA_KEY_ECON_DASHBOARD = st.secrets["dashboard_db"]
 deta_dashboard = Deta(DETA_KEY_ECON_DASHBOARD)
@@ -152,37 +136,50 @@ db_earnings = deta_dashboard.Base("daily_earnings")
 
 data_option = st.selectbox("Select Data", ["Forex Calendar","FX Market","Stock Market", "Commodities","Bonds","Crypto","Earnings"])
 
+
 if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
+        schedule.every(24).hours.do(update_calendar)
 
 if data_option == "FX Market":
     if st.button("Get Data"):
         currency_data = get_currencies()
         st.dataframe(currency_data, width=800)   
+        schedule.every(5).minutes.do(update_currency)
 
 if data_option == "Stock Market":
     if st.button("Get Data"):
         stocks_data = get_stocks()
-        st.dataframe(stocks_data, width=800)  
-
+        st.dataframe(stocks_data, width=800)
+        schedule.every(5).minutes.do(update_stocks)
+        
 if data_option == "Commodities":
     if st.button("Get Data"):
         commodity_data = get_commodities()
-        st.dataframe(commodity_data, width=800)  
+        st.dataframe(commodity_data, width=800)
+        schedule.every(5).minutes.do(update_commodities)
 
 if data_option == "Bonds":
     if st.button("Get Data"):
         bonds_data = get_bonds()
-        st.dataframe(bonds_data, width=800)  
+        st.dataframe(bonds_data, width=800)
+        schedule.every(5).minutes.do(update_bonds)
 
 if data_option == "Crypto":
     if st.button("Get Data"):
         crypto_data = get_crypto()
         st.dataframe(crypto_data, width=800)  
+        schedule.every(5).minutes.do(update_crypto)
 
 if data_option == "Earnings":
     if st.button("Get Data"):
         earnings_data = get_earnings()
-        st.dataframe(earnings_data, width=800)  
+        st.dataframe(earnings_data, width=800)
+        schedule.every(24).hours.do(update_earnings)
+        
+# Run the scheduled tasks indefinitely
+while True:
+    schedule.run_pending()
+    time.sleep(1)
