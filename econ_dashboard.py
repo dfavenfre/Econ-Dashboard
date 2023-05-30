@@ -142,44 +142,32 @@ if data_option == "Forex Calendar":
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
 
-
 if data_option == "FX Market":
     if st.button("Get Data"):
         currency_data = get_currencies()
         st.dataframe(currency_data, width=800)   
-schedule.every(5).minutes.do(update_currency)
 
 if data_option == "Stock Market":
     if st.button("Get Data"):
         stocks_data = get_stocks()
         st.dataframe(stocks_data, width=800)
-schedule.every(5).minutes.do(update_stocks)
         
 if data_option == "Commodities":
     if st.button("Get Data"):
         commodity_data = get_commodities()
         st.dataframe(commodity_data, width=800)
-schedule.every(5).minutes.do(update_commodities)
 
 if data_option == "Bonds":
     if st.button("Get Data"):
         bonds_data = get_bonds()
         st.dataframe(bonds_data, width=800)
-schedule.every(5).minutes.do(update_bonds)
 
 if data_option == "Crypto":
     if st.button("Get Data"):
         crypto_data = get_crypto()
         st.dataframe(crypto_data, width=800)  
-schedule.every(5).minutes.do(update_crypto)
 
 if data_option == "Earnings":
     if st.button("Get Data"):
         earnings_data = get_earnings()
         st.dataframe(earnings_data, width=800)
-schedule.every(24).hours.do(update_earnings)
-        
-# Run the scheduled tasks indefinitely
-while True:
-    schedule.run_pending()
-    time.sleep(2)
