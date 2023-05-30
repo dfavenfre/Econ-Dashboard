@@ -19,6 +19,8 @@ import pandas as pd
 from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
 from database import get_calendar, update_calendar, get_currencies, update_currency, get_stocks, update_stocks, get_commodities, update_commodities, get_bonds, update_bonds, get_crypto, update_crypto, get_earnings, update_earnings
 import os
+import schedule
+import time
 
 # Welcome to Econ Dashboard (Beta) 
 title_html = """
@@ -120,6 +122,21 @@ st.write(
     Access a professional-grade calendar featuring daily updates on Economic Calendar, Forex, Stocks, Commodities, Bonds, and Crypto and Earnings, including comprehensive news, actual, forecast, and previous announcements.
     """
 )
+
+
+# Schedule the update_calendar function to run every 5 minutes
+schedule.every(5).minutes.do(update_calendar)
+schedule.every(5).minutes.do(update_currency)
+schedule.every(5).minutes.do(update_stocks)
+schedule.every(5).minutes.do(update_commodities)
+schedule.every(5).minutes.do(update_bonds)
+schedule.every(5).minutes.do(update_crypto)
+schedule.every(5).minutes.do(update_earnings)
+
+# Run the scheduled tasks indefinitely
+while True:
+    schedule.run_pending()
+    time.sleep(1)
 
 
 from deta import Deta
