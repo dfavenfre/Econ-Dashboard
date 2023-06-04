@@ -148,7 +148,7 @@ if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
-    schedule_update()
+    schedule_calendar_update()
     updating = st.warning("Please Wait While Updating...")
     time.sleep(10)
     st.empty(updating)
