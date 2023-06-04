@@ -136,12 +136,23 @@ db_earnings = deta_dashboard.Base("daily_earnings")
 
 data_option = st.selectbox("Select Data", ["Forex Calendar","FX Market","Stock Market", "Commodities","Bonds","Crypto","Earnings"])
 
+def schedule_calendar_update():
+    # Schedule the update_calendar function to run every 24 hours
+    schedule.every(24).hours.do(update_calendar)
+    # Run the scheduler indefinitely
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 if data_option == "Forex Calendar":
     if st.button("Get Data"):
         calendar_data = get_calendar()
         st.dataframe(calendar_data, width=800)
-
+    schedule_update()
+    updating = st.warning("Please Wait While Updating...")
+    time.sleep(10)
+    st.empty(updating)
+    
 if data_option == "FX Market":
     if st.button("Get Data"):
         currency_data = get_currencies()
