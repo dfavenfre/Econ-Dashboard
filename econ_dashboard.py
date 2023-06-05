@@ -115,7 +115,7 @@ if st.session_state.ticker_df is not None:
     )
 
 ### Economic Calendar
-st.title("Economic Calendar")
+st.title("Data Provider")
 st.write(
     
     """
