@@ -52,4 +52,4 @@ Sentiment Classification model is trained on Phrasebank's agreeall Financial sen
 ## Time-Series Forecasting
 The model inputs are; last available Volume and 7 consecutive daily close data. The time-series feature is armed with two models that are specifically trained for both Large and Small Cap Stocks. You May Select The Model For Your Stock
 
-![image](https://github.com/dfavenfre/Econ-Dashboard/assets/118773869/6c19731e-97d6-44b4-9e3d-4af5036f490f)
+![image](https://github.com/dfavenfre/Econ-Dashboard/assets/118773869/54d39d51-9a01-4655-80ad-bf0901f53000)
