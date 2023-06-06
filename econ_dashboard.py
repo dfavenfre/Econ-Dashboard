@@ -7,7 +7,6 @@ from selenium.webdriver.chrome.options import Options
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras.models import load_model
-import pickle
 import datetime
 import pandas as pd
 import plotly.graph_objects as go
@@ -16,8 +15,9 @@ from datetime import datetime
 import yfinance as yf
 import pandas as pd
 from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
-import joblib
+from useful_functions import prepare_timeseries, predict_forward_window, upload_data
 import tensorflow as tf
+import time
 import tensorflow_hub as hub
 
 
@@ -263,3 +263,44 @@ if submit_button and text_input:
     sentiment_labels = ["Negative", "Neutral", "Positive"]
     for class_idx, prob in enumerate(prediction):
         st.write(f'{sentiment_labels[class_idx]}: {prob:.4f}')
+
+# Time-series Forecast
+st.title("Time-Series Forecasting")
+st.write("""
+Forecasting model is a fine-tuned LSTM model that is trained on 7-days look-back period to forecast 1-day forward window value. The model inputs are; last available Volume and 7 consecutive daily close data. 
+You have option to either upload your own data, or write the required data inputs on your own. The time-series feature is armed with two models that are specifically trained for both Large and Small Cap Stocks. You May Select The Model For Your Stock
+
+
+"""
+)
+
+# Upload File
+uploaded_file = st.file_uploader("Choose a file")
+
+# Model Selection
+select_cap = st.selectbox("Please Select A Market Capitalization Size", ("Large", "Low"))
+if select_cap == "Large":
+    large_cap_model = tf.keras.models.load_model(r"C:\Users\Tolga\Desktop\streamlit apps\econ_dashboard\large_cap_model.hdf5")
+    load_message = st.empty()
+    load_message.text("Model Loaded Successfuly")
+    time.sleep(1)
+    load_message.empty()
+else: 
+    low_cap_model = tf.keras.models.load_model(r"C:\Users\Tolga\Desktop\streamlit apps\econ_dashboard\low_cap_model.hdf5")
+    load_message = st.empty()
+    load_message.text("Model Loaded Successfuly")
+    time.sleep(1)
+    load_message.empty()
+
+# Data Pre-Processing
+submit = st.button(label="Initialize the forecast")
+if submit:
+    if select_cap == "Large":
+        dataframe = pd.read_csv(uploaded_file)
+        data = prepare_timeseries(dataframe, "Close", 7)
+        predict_forward_window(data, large_cap_model)
+    else:
+        dataframe = pd.read_csv(uploaded_file)
+        data = prepare_timeseries(dataframe, "Close", 7)
+        predict_forward_window(data, low_cap_model)
+    
