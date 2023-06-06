@@ -23,8 +23,8 @@ def prepare_timeseries(data, target_column:str, lookback:int)->ndarray:
   for i in range(lookback):
     data_copy[f"target_column+{i+1}"] = data_copy[target_column].shift(periods=i+1)
 
-  X = data_copy.dropna().drop([target_column], axis=1).astype(np.float32)
-
+  X = data_copy.dropna().astype(np.float32)
+  
   return X.iloc[-1:,:]
 
 def predict_forward_window(prediction_data:ndarray, model_name):
@@ -35,17 +35,17 @@ def predict_forward_window(prediction_data:ndarray, model_name):
   """
   prediction = tf.squeeze(model_name.predict(prediction_data))
   prediction = prediction.numpy()
-  result = (prediction / prediction_data["target_column+1"].values -1 )*100
+  result = (prediction / prediction_data["Close"].values -1 )*100
   
   # Drowdown
   if result<0:
-    st.write("Target Price: {:.3f}".format(prediction),
-          "Potential Downside: {}".format(str(np.round(result,2))+"%"))
+    st.write("Target Price: {:.3f}".format(prediction),"\n",
+          "\nPotential Downside: {}".format(str(np.round(result,2))+"%"))
 
   # Up-ward surge
   else:
-    st.write("Target Price: {:.3f}".format(prediction),
-    "Potential Upside: {}".format(str(np.round(result,2))+"%"))
+    st.write("Target Price: {:.3f}".format(prediction),"\n",
+    "\nPotential Upside: {}".format(str(np.round(result,2))+"%"))
 
 st.cache_data()
 def upload_data():
