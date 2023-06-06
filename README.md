@@ -46,3 +46,10 @@ with tf.keras.utils.custom_object_scope(custom_objects):
 ## Sentiment Analysis
 Sentiment Classification model is trained on Phrasebank's agreeall Financial sentiment [dataset](https://huggingface.co/datasets/financial_phrasebank/viewer/sentences_allagree/train).
 ![image](https://github.com/dfavenfre/Econ-Dashboard/assets/118773869/2c6b9dff-cf15-4ea5-bd00-776fd0854abd)
+
+
+
+## Time-Series Forecasting
+Forecasting model is a fine-tuned LSTM model that is trained on 7-days look-back period to forecast 1-day forward window value. The model inputs are; last available Volume and 7 consecutive daily close data. You have option to either upload your own data, or write the required data inputs on your own. The time-series feature is armed with two models that are specifically trained for both Large and Small Cap Stocks. You May Select The Model For Your Stock
+
+![image](https://github.com/dfavenfre/Econ-Dashboard/assets/118773869/6c19731e-97d6-44b4-9e3d-4af5036f490f)
