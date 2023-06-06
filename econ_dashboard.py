@@ -264,6 +264,7 @@ if submit_button and text_input:
     for class_idx, prob in enumerate(prediction):
         st.write(f'{sentiment_labels[class_idx]}: {prob:.4f}')
 
+
 # Time-series Forecast
 st.title("Time-Series Forecasting")
 st.write("""
@@ -278,14 +279,15 @@ You have option to either upload your own data, or write the required data input
 uploaded_file = st.file_uploader("Choose a file")
 
 # Model Selection
-select_cap = st.selectbox("Please Select A Market Capitalization Size", ("Large", "Low"))
-if select_cap == "Large":
+select_cap = st.selectbox("Please Select A Market Capitalization Size", ("Large Cap", "Small Cap"))
+if select_cap == "Large Cap":
     large_cap_model = tf.keras.models.load_model(r"C:\Users\Tolga\Desktop\streamlit apps\econ_dashboard\large_cap_model.hdf5")
     load_message = st.empty()
     load_message.text("Model Loaded Successfuly")
     time.sleep(1)
     load_message.empty()
-else: 
+
+elif select_cap == "Small Cap": 
     low_cap_model = tf.keras.models.load_model(r"C:\Users\Tolga\Desktop\streamlit apps\econ_dashboard\low_cap_model.hdf5")
     load_message = st.empty()
     load_message.text("Model Loaded Successfuly")
@@ -295,12 +297,12 @@ else:
 # Data Pre-Processing
 submit = st.button(label="Initialize the forecast")
 if submit:
-    if select_cap == "Large":
+    if select_cap == "Large Cap":
         dataframe = pd.read_csv(uploaded_file)
-        data = prepare_timeseries(dataframe, "Close", 7)
+        data = prepare_timeseries(dataframe, "Close", 6)
         predict_forward_window(data, large_cap_model)
-    else:
+        
+    elif select_cap == "Small Cap":
         dataframe = pd.read_csv(uploaded_file)
-        data = prepare_timeseries(dataframe, "Close", 7)
+        data = prepare_timeseries(dataframe, "Close", 6)
         predict_forward_window(data, low_cap_model)
-    
