@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from scraping_scripts import fx_calendar, fetch_currencies, fetch_stocks, fetch_commodities, fetch_bonds, fetch_crypto, fetch_earnings
 
 from deta import Deta
-DETA_KEY_ECON_DASHBOARD = "a0npy3sgmgy_Euq4VzyAMg2BLA1UNQhvtyi9bUtZF4gY"
+DETA_KEY_ECON_DASHBOARD = "INSERT_DETASPACE_DB_KEY"
 deta_dashboard = Deta(DETA_KEY_ECON_DASHBOARD)
 
 db_calendar = deta_dashboard.Base("daily_forex_calendar")
