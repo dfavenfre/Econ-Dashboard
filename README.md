@@ -1,5 +1,5 @@
 # Econ-Dashboard
-A centralized dashboard for screening and downloading Stock/ETF/FX/Economic Data, as well as viewing Forex, Metal, Energy, and Crypto Calendars. Apart from being a one-stop data provider, Econ-Dashboard is also equipped with sentiment classifier trained on financial/economic sentiment. A time-series forecasting model will be added soon !
+A centralized dashboard for screening and downloading Stock/ETF/FX/Economic Data, as well as viewing Forex, Metal, Energy, and Crypto Calendars. Apart from being a one-stop data provider, Econ-Dashboard is also equipped with sentiment classifier trained on financial/economic sentiment. For time series forecasting, the app has two hand-crafted LSTM time-series models distinquished for market capitalization constraints, such as large and low market capitalization. 
 
 The sentiment classification model is available at my [huggingface](https://huggingface.co/dfavenfre/model_use/tree/main) repository
 
