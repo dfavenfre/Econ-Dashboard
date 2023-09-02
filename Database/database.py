@@ -57,7 +57,7 @@ def update_calendar():
     return db_calendar.put({"time":time.tolist(), "currency":currency.tolist(),
                    "event":event.tolist(), "actual":actual.tolist(),
                    "consensus":consensus.tolist(),"forecast":forecast.tolist(),
-                   "previous":previous.tolist()},key="1xs953alc6ee")
+                   "previous":previous.tolist()},key=os.environ.get("CALENDAR_KEY"))
 
 
 # (CURRENCY)
@@ -97,7 +97,7 @@ def update_currency():
         "weekly": weekly.tolist(),
         "monthly": monthly.tolist(),
         "yoy": yoy.tolist()
-    }, key="f58wghu8vxnj")
+    }, key=os.environ.get("CURRENCY_KEY"))
 
 
 # (STOCKS)
@@ -131,7 +131,7 @@ def update_stocks():
     yoy = data["yoy"]
     return db_stocks.put({"indice":indice.tolist(),"price":price.tolist(),
                             "percentage_change":percentage_change.tolist(),"weekly":weekly.tolist(),
-                            "monthly":monthly.tolist(), "yoy":yoy.tolist()}, key="m28hc4otuhqf") 
+                            "monthly":monthly.tolist(), "yoy":yoy.tolist()}, key=os.environ.get("STOCKS_KEY")) 
 
 
 # (COMMODITY)
@@ -165,7 +165,7 @@ def update_commodities():
     yoy = data["yoy"]
     return db_commodities.put({"commodity":commodity.tolist(),"price":price.tolist(),
                             "percentage_change":percentage_change.tolist(),"weekly":weekly.tolist(),
-                            "monthly":monthly.tolist(), "yoy":yoy.tolist()},key="2irpii2q3vnx")    
+                            "monthly":monthly.tolist(), "yoy":yoy.tolist()},key=os.environ.get("COMMODITY_KEY"))    
 
 
 # (BONDS)
@@ -197,7 +197,7 @@ def update_bonds():
     yoy = data["yoy"]
     return db_bonds.put({"Y_10":Y_10.tolist(),"yields":yields.tolist(),
                                 "weekly":weekly.tolist(),"monthly":monthly.tolist(), 
-                                "yoy":yoy.tolist()}, key="f14b8z16eo9k")      
+                                "yoy":yoy.tolist()}, key=os.environ.get("BONDS_KEY"))      
 
 
 # (CRYPTO)
@@ -235,7 +235,7 @@ def update_crypto():
     return db_crypto.put({"currency":currency.tolist(),"price":price.tolist(),
                             "percentage_change":percentage_change.tolist(),"weekly":weekly.tolist(),
                             "monthly":monthly.tolist(), "yoy":yoy.tolist(),
-                            "marketcap":marketcap.tolist()}, key="hihy4ph27jkj") 
+                            "marketcap":marketcap.tolist()}, key=os.environ.get("CRYPTO_KEY")) 
 
 
 # (EARNINGS)
@@ -275,4 +275,4 @@ def update_earnings():
     return db_earnings.put({"company_name":company_name.tolist(), "eps":eps.tolist(),
                             "consensus":consensus.tolist(), "previous":previous.tolist(),
                             "revenue":revenue.tolist(),"forecast":forecast.tolist(), 
-                            "marketcap":marketcap.tolist(),"fiscal":fiscal.tolist()}, key="ckiwvealzl04")
+                            "marketcap":marketcap.tolist(),"fiscal":fiscal.tolist()}, key=os.environ.get("EARNINGS_KEY))
